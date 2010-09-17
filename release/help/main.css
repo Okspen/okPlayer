@@ -1,0 +1,94 @@
+body {
+	font-family: Tahoma, sans-serif;
+	font-weight:100;
+}
+
+#wrapper {
+	margin: 2% auto;
+	width:90%;
+}
+
+#header {
+	margin-bottom:10px;
+}
+
+h2, #questions, #answers {
+	margin-top:15px;
+}
+
+h1, h2, h3, p {
+	font-weight:100;
+}
+
+h1, p.version{
+	display:inline;
+	margin-right:12px;
+}
+
+h1 {
+	font-size:40px;
+}
+
+h2 {
+	font-size: 25px;
+}
+
+h3 {
+	font-size: 20px;
+}
+
+p.version {
+	font-size: 20px;
+}
+
+ol {
+	list-style: decimal;
+}
+
+#questions, #answers {
+	line-height: 120%;
+}
+
+#questions ol{
+	margin-top: 10px;
+}
+
+#questions ol li {
+	margin: 3px 0 0 22px;
+}
+
+#answers ol li {
+	margin: 12px 0 0 22px;
+}
+
+#answers ol ul {
+	margin:3px 0 7px 0;
+}
+
+/* элементы списка внутри пункта */
+#answers ol ul li {
+	margin: 0 0 5px 22px;
+}
+
+ul li {
+	list-style: circle;
+}
+
+a:link, a:visited {
+	color:blue;
+}
+
+#footer {
+	margin-top: 20px;
+}
+
+#footer span {
+	font-family: Arial, sans-serif;
+	font-size:	15px;
+	font-weight: 900;
+	color:#eee;
+	background:#111;
+	padding: 4px 6px 4px 10px;
+	margin-left:-6%;	
+}
+	

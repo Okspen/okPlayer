@@ -1,0 +1,17 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\okplayer.o
+./release\okhddthread.o
+./release\okdirtreeview.o
+./release\okvlcwrapper.o
+./release\okseekslider.o
+./release\oktablestaritem.o
+./release\moc_mainwindow.o
+./release\moc_okplayer.o
+./release\moc_okhddthread.o
+./release\moc_okdirtreeview.o
+./release\moc_okvlcwrapper.o
+./release\moc_okseekslider.o
+./release\qrc_icons.o
+);
