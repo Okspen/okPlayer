@@ -24,3 +24,4 @@ aboutDialog::~aboutDialog()
 {
     delete ui;
 }
+///
