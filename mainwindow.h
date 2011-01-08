@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QSplitter>
 #include <QFileDialog>
+#include <QProgressDialog>
 #include <QDesktopServices>
 
 #include <okplayer.h>
@@ -12,6 +13,7 @@
 
 #include <aboutdialog.h>
 #include <savedialog.h>
+#include <dbbrowser.h>
 
 namespace Ui {
     class MainWindow;
@@ -24,17 +26,16 @@ public:
     ~MainWindow();
 
 protected:
-    void changeEvent(QEvent *e);
+    void changeEvent(QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     Ui::MainWindow *ui;
     okPlayer* player;
-    QSplitter* splitter;
-    QSplitter* splitter2;
+    QSplitter* dirPlaylistSplitter;
 
-    void createMenu();
-	void createSplitters();
-	void setConnections();
+    void setConnections();
 
     //сохраняет настройки
     void saveSettings();
@@ -46,9 +47,12 @@ private slots:
     void showAboutDialog();
     void openPlaylist();
     void savePlaylist();
+    void copyPlaylist();
     void loadFavorites();
-	void loadPlaylist(QModelIndex i);
-	void openHelp();
+    void loadPlaylist(QModelIndex i);
+    void openHelp();
+    void openMusicBrowser();
+    void refreshFileSystem();
 };
 
 #endif // MAINWINDOW_H

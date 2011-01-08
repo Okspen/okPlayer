@@ -5,35 +5,36 @@
 #include <QDir>
 #include <QTime>
 
-class okHDDThread : public QThread
+class okHddThread : public QThread
 {
 	Q_OBJECT
 public:
-    okHDDThread();
-	okHDDThread(QStringList extensions, bool newAppend = false);
-	void run();
+    okHddThread();
+    okHddThread(const QStringList& extensions, bool newAppend = false);
+    void run();
 
-	void setPath(const QString &newPath);
-	void setFileExt(const QStringList& extensions);
-	void setOnlyRoot(bool newOnlyRoot);
+    void setAppend(bool newAppend);
+    void setPath(const QString &newPath);
+    void setFileExt(const QStringList& extensions);
+    void setOnlyRoot(bool newOnlyRoot);
 
-	bool getAppend();
-	QStringList getPlaylist();
+    bool getAppend();
+    QStringList getPlaylist();
 
 private:
-	QStringList scanMediaFiles(const QString& path);
+    QStringList scanMediaFiles(const QString& path);
 
-	int foldersCount;
-	int totalFilesCount;
-	int mediaFilesCount;
+    int foldersCount;
+    int totalFilesCount;
+    int mediaFilesCount;
 
-	QString path;
-	QStringList fileExt;
-	QStringList playlist;
+    QString path;
+    QStringList fileExt;
+    QStringList playlist;
 
-	QTime time;
-	bool append;
-	bool onlyRoot;
+    QTime time;
+    bool append;
+    bool onlyRoot;
 
 signals:
 	void statsUpdated(int files, int total, int folders, QString time);

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QFont>
+#include <QFile>
 
 namespace Ui {
     class aboutDialog;
@@ -18,6 +19,7 @@ public:
 
 private:
     Ui::aboutDialog *ui;
+    void readChangelog();
 };
 
 #endif // ABOUTDIALOG_H

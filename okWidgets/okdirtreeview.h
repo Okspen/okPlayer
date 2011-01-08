@@ -3,26 +3,32 @@
 
 #include <QTreeView>
 #include <QMouseEvent>
+#include <QFileSystemModel>
 #include <QMenu>
 
 class okDirTreeView : public QTreeView
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	okDirTreeView(QWidget *parent);
-	~okDirTreeView();
+    okDirTreeView(QWidget *parent);
+    ~okDirTreeView();
+
 protected:
-	void mouseReleaseEvent(QMouseEvent *e);
-	void contextMenuEvent(QContextMenuEvent *e);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event);
+
 signals:
-	void midClicked(QModelIndex);
-	void newPlaylist(QModelIndex, bool);
-	void addToPlaylist(QModelIndex, bool);
+    void midClicked(QModelIndex);
+    void newPlaylist(QModelIndex, bool);
+    void addToPlaylist(QModelIndex, bool);
+
 private:
-	QAction* toNewAllFilesAction;
-	QAction* toCurrentAllFilesAction;
-	QAction* toNewRootFilesAction;
-	QAction* toCurrentRootFilesAction;
+    QAction* appendFileAction;
+    QAction* replaceFileAction;
+    QAction* appendAllFilesAction;
+    QAction* appendRootFilesAction;
+    QAction* replaceAllFilesAction;
+    QAction* replaceRootFilesAction;
 };
 
 #endif // OKDIRTREEVIEW_H

@@ -16,17 +16,17 @@ public:
     explicit okPlaylistListWidget(QWidget *parent = 0);
 
 protected:
-	void contextMenuEvent(QContextMenuEvent *e);
-	void keyPressEvent(QKeyEvent *event);
+    void contextMenuEvent(QContextMenuEvent *e);
+    void keyPressEvent(QKeyEvent *event);
 
 signals:
 
 public slots:
     void updateList();
-	void removePlaylist(QModelIndex i);
+    void removePlaylist(QModelIndex i);
 
 private:
-	QAction* removeAction;
+    QAction* removeAction;
 
 };
 

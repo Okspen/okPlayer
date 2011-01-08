@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'savedialog.ui'
 **
-** Created: Mon 6. Sep 01:04:19 2010
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Mon 6. Dec 19:17:55 2010
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

@@ -2,48 +2,65 @@
 
 okDirTreeView::okDirTreeView(QWidget *parent) : QTreeView(parent)
 {
-	toNewAllFilesAction = new QAction("Replace with all files", this);
-	toCurrentAllFilesAction = new QAction("Add all files", this);
-	toNewRootFilesAction = new QAction("Replace with root files", this);
-	toCurrentRootFilesAction = new QAction("Add root files", this);
+    appendFileAction = new QAction("Append", this);
+    replaceFileAction = new QAction("Replace", this);
+
+    appendAllFilesAction = new QAction("Append all", this);
+    appendRootFilesAction = new QAction("Append root", this);
+    replaceAllFilesAction = new QAction("Replace with all", this);
+    replaceRootFilesAction = new QAction("Replace with root", this);
 }
 
 okDirTreeView::~okDirTreeView()
 {
-	delete toNewAllFilesAction;
-	delete toCurrentAllFilesAction;
-	delete toNewRootFilesAction;
-	delete toCurrentRootFilesAction;
+    delete appendFileAction;
+    delete replaceFileAction;
+    delete appendAllFilesAction;
+    delete appendRootFilesAction;
+    delete replaceAllFilesAction;
+    delete replaceRootFilesAction;
 }
 
 void okDirTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
-	if(event->button() == Qt::MidButton)
-	{
-		emit midClicked(indexAt(event->pos()));
-	}
+    if(event->button() == Qt::MidButton)
+        emit midClicked(indexAt(event->pos()));
     else QTreeView::mouseReleaseEvent(event);
 }
 
-void okDirTreeView::contextMenuEvent(QContextMenuEvent *e)
+void okDirTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
-	QModelIndex i = indexAt(e->pos());
+    QModelIndex i = indexAt(event->pos());
+    QFileSystemModel* fsModel = (QFileSystemModel*) model();
 
-	QMenu menu(this);
-	menu.addAction(toNewAllFilesAction);
-	menu.addAction(toCurrentAllFilesAction);
-	menu.addAction(toNewRootFilesAction);
-	menu.addAction(toCurrentRootFilesAction);
+    bool isFile = QFileInfo(fsModel->filePath(i)).isFile();
 
-	QAction* triggeredAction = menu.exec(mapToGlobal(e->pos()));
-	if(triggeredAction == 0) return;
+    QMenu menu(this);
+    if(isFile)
+    {
+        menu.addAction(appendFileAction);
+        menu.addAction(replaceFileAction);
+    }
+    else
+    {
+        menu.addAction(appendAllFilesAction);
+        menu.addAction(appendRootFilesAction);
+        menu.addAction(replaceAllFilesAction);
+        menu.addAction(replaceRootFilesAction);
+    }
 
-	if (triggeredAction == toNewAllFilesAction)
-		emit newPlaylist(i, false);
-	if(triggeredAction == toCurrentAllFilesAction)
-		emit addToPlaylist(i, false);
-	if(triggeredAction == toNewRootFilesAction)
-		emit newPlaylist(i, true);
-	if(triggeredAction == toCurrentRootFilesAction)
-		emit addToPlaylist(i, true);
+    QAction* triggeredAction = menu.exec(mapToGlobal(event->pos()));
+    if(triggeredAction == 0) return;
+
+    if (triggeredAction==replaceAllFilesAction || triggeredAction==replaceFileAction)
+        emit newPlaylist(i, false);
+
+    if(triggeredAction==appendAllFilesAction || triggeredAction==appendFileAction)
+        emit addToPlaylist(i, false);
+
+    if(triggeredAction==replaceRootFilesAction)
+        emit newPlaylist(i, true);
+
+    if(triggeredAction==appendRootFilesAction)
+        emit addToPlaylist(i, true);
 }

@@ -1,84 +1,90 @@
 #include "okhddthread.h"
 
-okHDDThread::okHDDThread()
+okHddThread::okHddThread()
 {
-	append = false;
-	onlyRoot = false;
+    append = false;
+    onlyRoot = false;
 }
 
-okHDDThread::okHDDThread(QStringList extensions, bool newAppend)
+okHddThread::okHddThread(const QStringList& extensions, bool newAppend)
 {
-	append = newAppend;
-	setFileExt(extensions);
+    append = newAppend;
+    setFileExt(extensions);
+    onlyRoot = false;
 }
 
-void okHDDThread::run()
+void okHddThread::run()
 {
-	foldersCount = 1;
-	mediaFilesCount = 0;
-	totalFilesCount = 0;
-	time.start();
+    foldersCount = 1;
+    mediaFilesCount = 0;
+    totalFilesCount = 0;
+    time.start();
 
-	playlist = scanMediaFiles(path);
+    playlist = scanMediaFiles(path);
 }
 
-QStringList okHDDThread::scanMediaFiles(const QString& path)
+QStringList okHddThread::scanMediaFiles(const QString& path)
 {
-	QDir navigator(path);
-	QStringList foundMediaSources;
+    QDir navigator(path);
+    QStringList foundMediaSources;
 
-	QStringList entries = navigator.entryList();
-	QString fileOrDir;
-	QFileInfo fileOrDirInfo;
+    QString fileOrDir;
+    QFileInfo fileOrDirInfo;
+    QStringList entries = navigator.entryList();
 
-	foreach(fileOrDir, entries)
-	{
-		fileOrDirInfo.setFile(navigator.absolutePath() + "/" + fileOrDir);
-		if(fileOrDirInfo.isDir())
-		{
-			//запускаем рекурсивно и результаты пристыковываем к основному массиву
-			if((fileOrDir != ".") && (fileOrDir != "..") && (onlyRoot != false))
-			{
-				foundMediaSources.append(scanMediaFiles(navigator.absolutePath() + "/" + fileOrDir));
-				foldersCount++;
-			}
-		}
-		else
-		{
-			if(fileExt.indexOf("*."+fileOrDirInfo.suffix().toLower()) != -1)
-			{
-				foundMediaSources << navigator.absoluteFilePath(fileOrDir);
-				mediaFilesCount++;
-			}
-			totalFilesCount++;
-			emit statsUpdated(mediaFilesCount, totalFilesCount, foldersCount, QTime().addMSecs(time.elapsed()).toString("mm:ss:zzz"));
-		}
-	}
-	return foundMediaSources;
+    foreach(fileOrDir, entries)
+    {
+        fileOrDirInfo.setFile(navigator.absolutePath() + "/" + fileOrDir);
+        if(fileOrDirInfo.isDir())
+        {
+            //запускаем рекурсивно и результаты пристыковываем к основному массиву
+            if((fileOrDir != ".") && (fileOrDir != "..") && (onlyRoot == false))
+            {
+                foundMediaSources.append(scanMediaFiles(navigator.absolutePath() + "/" + fileOrDir));
+                foldersCount++;
+            }
+        }
+        else
+        {
+            if(fileExt.indexOf("*."+fileOrDirInfo.suffix().toLower()) != -1)
+            {
+                foundMediaSources << navigator.absoluteFilePath(fileOrDir);
+                mediaFilesCount++;
+            }
+            totalFilesCount++;
+            emit statsUpdated(mediaFilesCount, totalFilesCount, foldersCount, QTime().addMSecs(time.elapsed()).toString("mm:ss:zzz"));
+        }
+    }
+    return foundMediaSources;
 }
 
-void okHDDThread::setPath(const QString &newPath)
+void okHddThread::setAppend(bool newAppend)
 {
-	path = newPath;
+    append = newAppend;
 }
 
-QStringList okHDDThread::getPlaylist()
+void okHddThread::setPath(const QString &newPath)
 {
-	return playlist;
+    path = newPath;
 }
 
-void okHDDThread::setFileExt(const QStringList& extensions)
+QStringList okHddThread::getPlaylist()
 {
-	if(!extensions.empty())
-		fileExt = extensions;
+    return playlist;
 }
 
-bool okHDDThread::getAppend()
+void okHddThread::setFileExt(const QStringList& extensions)
 {
-	return append;
+    if(!extensions.empty())
+        fileExt = extensions;
 }
 
-void okHDDThread::setOnlyRoot(bool newOnlyRoot)
+bool okHddThread::getAppend()
 {
-	onlyRoot = newOnlyRoot;
+    return append;
+}
+
+void okHddThread::setOnlyRoot(bool newOnlyRoot)
+{
+    onlyRoot = newOnlyRoot;
 }

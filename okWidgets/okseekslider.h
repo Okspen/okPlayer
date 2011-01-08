@@ -10,18 +10,18 @@ class okSeekSlider : public QSlider
 {
 	Q_OBJECT
 public:
-	okSeekSlider(QWidget* parent);
-	void setVLC(okVLCWrapper* newVLC);
+    okSeekSlider(QWidget* parent);
+    void setVLC(okVLCWrapper* newVLC);
 
 public slots:
-	void updatePosition();
+    void updatePosition();
 
 protected:
-	void mousePressEvent(QMouseEvent *e);
-	void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 
 private:
-	okVLCWrapper* vlc;
+    okVLCWrapper* vlc;
 };
 
 #endif // OKSEEKSLIDER_H

@@ -7,13 +7,13 @@ class okTableStarItem : public QTableWidgetItem
 {
 public:
     okTableStarItem();
-	void setChecked(bool checked);
-	void toggle();
-	bool isChecked() const;
-	bool operator< (const QTableWidgetItem& other) const;
+    void setChecked(bool checked);
+    void toggle();
+    bool isChecked() const;
+    bool operator< (const QTableWidgetItem& other) const;
 
 private:
-	bool checkState;
+    bool checkState;
 };
 
 #endif // OKTABLESTARITEM_H

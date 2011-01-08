@@ -16,7 +16,7 @@ void okTrackTimeLabel::setVLC(okVLCWrapper *newVLC)
 void okTrackTimeLabel::updateTime()
 {
     int totalsec = vlc->getLength()/1000;
-	int currentsec = ceil(vlc->getPosition() * totalsec);
+    int currentsec = ceil(vlc->getPosition() * totalsec);
 
     QString format;
     if(totalsec/3600 > 0) format = "h:mm:ss";
@@ -35,8 +35,8 @@ void okTrackTimeLabel::updateTime()
         break;
     }
 
-	if(totalsec/3600 > 0) setFixedWidth(fontMetrics().width("0:00:00/0:00:00"));
-	else setFixedWidth(fontMetrics().width("00:00/00:00"));
+    if(totalsec/3600 > 0) setFixedWidth(fontMetrics().width("0:00:00/0:00:00"));
+    else setFixedWidth(fontMetrics().width("00:00/00:00"));
 }
 
 void okTrackTimeLabel::mousePressEvent(QMouseEvent *e)

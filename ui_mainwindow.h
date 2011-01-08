@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed 15. Sep 18:10:07 2010
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Fri 7. Jan 14:35:00 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -14,10 +14,14 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QComboBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QMainWindow>
+#include <QtGui/QMenu>
+#include <QtGui/QMenuBar>
 #include <QtGui/QPushButton>
 #include <QtGui/QSlider>
 #include <QtGui/QStatusBar>
@@ -28,18 +32,21 @@
 #include <okWidgets/okseekslider.h>
 #include <okWidgets/oktracktimelabel.h>
 #include "okWidgets/okdirtreeview.h"
-#include "okWidgets/oklotsofstatesbutton.h"
-#include "okWidgets/okplaylistlistwidget.h"
 
 QT_BEGIN_NAMESPACE
 
 class Ui_MainWindow
 {
 public:
+    QAction *actionAlways_on_top;
+    QAction *actionHelp;
+    QAction *actionAbout;
+    QAction *actionMusic_browser;
+    QAction *actionPlaylist;
+    QAction *actionDirectory_tree;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout;
-    QPushButton *buttonMenu;
     QToolButton *buttonStop;
     QToolButton *buttonPause;
     QToolButton *buttonPlay;
@@ -48,25 +55,47 @@ public:
     QToolButton *buttonRandom;
     QSlider *sliderVolume;
     QHBoxLayout *horizontalLayout_3;
-    okLotsOfStatesButton *buttonPlayingModeState;
     okTrackTimeLabel *label;
     okSeekSlider *sliderSeek;
     QHBoxLayout *horizontalLayout_2;
-    QPushButton *buttonSavePlaylist;
+    QPushButton *buttonCopyPlaylist;
+    QComboBox *playModeBox;
     QPushButton *buttonLoadFavorites;
+    QWidget *searchWidget;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_2;
     QLineEdit *fieldQuickSearch;
-    QHBoxLayout *horizontalLayout_5;
-    QVBoxLayout *verticalLayout;
-    okPlaylistListWidget *playlistListWidget;
+    QPushButton *pushButton;
+    QVBoxLayout *splitterLayout;
     okPlaylistWidget *playlistWidget;
     okDirTreeView *dirTree;
     QStatusBar *statusBar;
+    QMenuBar *menuBar;
+    QMenu *menuMenu;
+    QMenu *menuView_2;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(418, 494);
+        actionAlways_on_top = new QAction(MainWindow);
+        actionAlways_on_top->setObjectName(QString::fromUtf8("actionAlways_on_top"));
+        actionAlways_on_top->setCheckable(true);
+        actionAlways_on_top->setShortcutContext(Qt::ApplicationShortcut);
+        actionHelp = new QAction(MainWindow);
+        actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
+        actionAbout = new QAction(MainWindow);
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
+        actionMusic_browser = new QAction(MainWindow);
+        actionMusic_browser->setObjectName(QString::fromUtf8("actionMusic_browser"));
+        actionMusic_browser->setEnabled(false);
+        actionPlaylist = new QAction(MainWindow);
+        actionPlaylist->setObjectName(QString::fromUtf8("actionPlaylist"));
+        actionPlaylist->setCheckable(true);
+        actionDirectory_tree = new QAction(MainWindow);
+        actionDirectory_tree->setObjectName(QString::fromUtf8("actionDirectory_tree"));
+        actionDirectory_tree->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -77,18 +106,6 @@ public:
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-        buttonMenu = new QPushButton(centralWidget);
-        buttonMenu->setObjectName(QString::fromUtf8("buttonMenu"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(buttonMenu->sizePolicy().hasHeightForWidth());
-        buttonMenu->setSizePolicy(sizePolicy);
-        buttonMenu->setMinimumSize(QSize(50, 0));
-        buttonMenu->setMaximumSize(QSize(50, 16777215));
-
-        horizontalLayout->addWidget(buttonMenu);
-
         buttonStop = new QToolButton(centralWidget);
         buttonStop->setObjectName(QString::fromUtf8("buttonStop"));
         buttonStop->setMinimumSize(QSize(24, 24));
@@ -167,18 +184,13 @@ public:
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         horizontalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
-        buttonPlayingModeState = new okLotsOfStatesButton(centralWidget);
-        buttonPlayingModeState->setObjectName(QString::fromUtf8("buttonPlayingModeState"));
-
-        horizontalLayout_3->addWidget(buttonPlayingModeState);
-
         label = new okTrackTimeLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy);
         label->setMinimumSize(QSize(0, 21));
         label->setMaximumSize(QSize(16777215, 21));
 
@@ -200,59 +212,92 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        buttonSavePlaylist = new QPushButton(centralWidget);
-        buttonSavePlaylist->setObjectName(QString::fromUtf8("buttonSavePlaylist"));
+        buttonCopyPlaylist = new QPushButton(centralWidget);
+        buttonCopyPlaylist->setObjectName(QString::fromUtf8("buttonCopyPlaylist"));
 
-        horizontalLayout_2->addWidget(buttonSavePlaylist);
+        horizontalLayout_2->addWidget(buttonCopyPlaylist);
+
+        playModeBox = new QComboBox(centralWidget);
+        playModeBox->setObjectName(QString::fromUtf8("playModeBox"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(playModeBox->sizePolicy().hasHeightForWidth());
+        playModeBox->setSizePolicy(sizePolicy1);
+
+        horizontalLayout_2->addWidget(playModeBox);
 
         buttonLoadFavorites = new QPushButton(centralWidget);
         buttonLoadFavorites->setObjectName(QString::fromUtf8("buttonLoadFavorites"));
 
         horizontalLayout_2->addWidget(buttonLoadFavorites);
 
-        fieldQuickSearch = new QLineEdit(centralWidget);
-        fieldQuickSearch->setObjectName(QString::fromUtf8("fieldQuickSearch"));
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(fieldQuickSearch->sizePolicy().hasHeightForWidth());
-        fieldQuickSearch->setSizePolicy(sizePolicy2);
-        fieldQuickSearch->setStyleSheet(QString::fromUtf8(""));
-
-        horizontalLayout_2->addWidget(fieldQuickSearch);
-
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setSpacing(6);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        searchWidget = new QWidget(centralWidget);
+        searchWidget->setObjectName(QString::fromUtf8("searchWidget"));
+        searchWidget->setEnabled(true);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(searchWidget->sizePolicy().hasHeightForWidth());
+        searchWidget->setSizePolicy(sizePolicy2);
+        horizontalLayout_4 = new QHBoxLayout(searchWidget);
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        label_2 = new QLabel(searchWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
 
-        horizontalLayout_5->addLayout(verticalLayout);
+        horizontalLayout_4->addWidget(label_2);
 
-        playlistListWidget = new okPlaylistListWidget(centralWidget);
-        playlistListWidget->setObjectName(QString::fromUtf8("playlistListWidget"));
+        fieldQuickSearch = new QLineEdit(searchWidget);
+        fieldQuickSearch->setObjectName(QString::fromUtf8("fieldQuickSearch"));
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(fieldQuickSearch->sizePolicy().hasHeightForWidth());
+        fieldQuickSearch->setSizePolicy(sizePolicy3);
+        fieldQuickSearch->setStyleSheet(QString::fromUtf8(""));
 
-        horizontalLayout_5->addWidget(playlistListWidget);
+        horizontalLayout_4->addWidget(fieldQuickSearch);
+
+        pushButton = new QPushButton(searchWidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_4->addWidget(pushButton);
 
 
-        verticalLayout_2->addLayout(horizontalLayout_5);
+        verticalLayout_2->addWidget(searchWidget);
+
+        splitterLayout = new QVBoxLayout();
+        splitterLayout->setSpacing(6);
+        splitterLayout->setObjectName(QString::fromUtf8("splitterLayout"));
+
+        verticalLayout_2->addLayout(splitterLayout);
 
         playlistWidget = new okPlaylistWidget(centralWidget);
         playlistWidget->setObjectName(QString::fromUtf8("playlistWidget"));
-        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(playlistWidget->sizePolicy().hasHeightForWidth());
-        playlistWidget->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(playlistWidget->sizePolicy().hasHeightForWidth());
+        playlistWidget->setSizePolicy(sizePolicy5);
         playlistWidget->setMinimumSize(QSize(0, 0));
         playlistWidget->setSizeIncrement(QSize(0, 0));
         playlistWidget->setAcceptDrops(true);
         playlistWidget->setFrameShape(QFrame::StyledPanel);
         playlistWidget->setFrameShadow(QFrame::Sunken);
+        playlistWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        playlistWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+        playlistWidget->horizontalHeader()->setVisible(false);
+        playlistWidget->verticalHeader()->setVisible(false);
 
         verticalLayout_2->addWidget(playlistWidget);
 
@@ -273,8 +318,26 @@ public:
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         statusBar->setSizeGripEnabled(true);
         MainWindow->setStatusBar(statusBar);
+        menuBar = new QMenuBar(MainWindow);
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 418, 26));
+        menuMenu = new QMenu(menuBar);
+        menuMenu->setObjectName(QString::fromUtf8("menuMenu"));
+        menuView_2 = new QMenu(menuBar);
+        menuView_2->setObjectName(QString::fromUtf8("menuView_2"));
+        MainWindow->setMenuBar(menuBar);
+
+        menuBar->addAction(menuMenu->menuAction());
+        menuBar->addAction(menuView_2->menuAction());
+        menuMenu->addAction(actionAlways_on_top);
+        menuMenu->addAction(actionMusic_browser);
+        menuMenu->addAction(actionHelp);
+        menuMenu->addAction(actionAbout);
+        menuView_2->addAction(actionPlaylist);
+        menuView_2->addAction(actionDirectory_tree);
 
         retranslateUi(MainWindow);
+        QObject::connect(pushButton, SIGNAL(clicked()), fieldQuickSearch, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -282,7 +345,13 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "okPlayer", 0, QApplication::UnicodeUTF8));
-        buttonMenu->setText(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
+        actionAlways_on_top->setText(QApplication::translate("MainWindow", "Always on top", 0, QApplication::UnicodeUTF8));
+        actionAlways_on_top->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", 0, QApplication::UnicodeUTF8));
+        actionHelp->setText(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
+        actionAbout->setText(QApplication::translate("MainWindow", "About", 0, QApplication::UnicodeUTF8));
+        actionMusic_browser->setText(QApplication::translate("MainWindow", "Music browser", 0, QApplication::UnicodeUTF8));
+        actionPlaylist->setText(QApplication::translate("MainWindow", "Playlist", 0, QApplication::UnicodeUTF8));
+        actionDirectory_tree->setText(QApplication::translate("MainWindow", "Directory tree", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         buttonStop->setToolTip(QApplication::translate("MainWindow", "Stop", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
@@ -307,10 +376,21 @@ public:
         buttonRandom->setToolTip(QApplication::translate("MainWindow", "Random", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         buttonRandom->setText(QApplication::translate("MainWindow", "?", 0, QApplication::UnicodeUTF8));
-        buttonPlayingModeState->setText(QApplication::translate("MainWindow", "PushButton", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
-        buttonSavePlaylist->setText(QApplication::translate("MainWindow", "Save playlist", 0, QApplication::UnicodeUTF8));
+        buttonCopyPlaylist->setText(QApplication::translate("MainWindow", "Copy playlist", 0, QApplication::UnicodeUTF8));
+        playModeBox->clear();
+        playModeBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Loop track", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Loop playlist", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Stop after track", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Stop after playlist", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Random", 0, QApplication::UnicodeUTF8)
+        );
         buttonLoadFavorites->setText(QApplication::translate("MainWindow", "Load favourites", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("MainWindow", "Find in playlist:", 0, QApplication::UnicodeUTF8));
+        pushButton->setText(QApplication::translate("MainWindow", "Clear", 0, QApplication::UnicodeUTF8));
+        menuMenu->setTitle(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
+        menuView_2->setTitle(QApplication::translate("MainWindow", "View", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

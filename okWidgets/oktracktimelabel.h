@@ -14,9 +14,7 @@ public:
     void setVLC(okVLCWrapper* newVLC);
 
 protected:
-	void mousePressEvent(QMouseEvent *e);
-
-signals:
+    void mousePressEvent(QMouseEvent *e);
 
 private slots:
     void updateTime();
