@@ -242,7 +242,7 @@ void okPlaylistWidget::refresh()
 void okPlaylistWidget::fillFromFavourites()
 {
     updateFavourites();
-    replace(favouriteTracks);
+    replace(*favouriteTracks);
 }
 
 void okPlaylistWidget::setFavourites(okPlaylist* newFavourites)
