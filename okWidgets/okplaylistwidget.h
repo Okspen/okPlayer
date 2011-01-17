@@ -3,12 +3,16 @@
 
 #include <QTableWidget>
 #include <QMouseEvent>
-#include <okWidgets/oktablestaritem.h>
 #include <QMimeData>
 #include <QUrl>
 #include <QFile>
-#include <QAction>
+#include <QDir>
 #include <QMenu>
+#include <QAction>
+#include <QDesktopServices>
+#include "okplaylist.h"
+#include "okWidgets/oktablestaritem.h"
+
 #include <QDebug>
 
 class okPlaylistWidget : public QTableWidget
@@ -16,9 +20,14 @@ class okPlaylistWidget : public QTableWidget
     Q_OBJECT
 public:
     explicit okPlaylistWidget(QWidget *parent = 0);
-    void fillFromList(const QStringList &newPlaylist, bool append = false);
+    ~okPlaylistWidget();
+    void append(okPlaylist* newPlaylist);
+    void append(const QStringList& newPlaylist);
+    void replace(okPlaylist* newPlaylist);
+    void replace(const QStringList& newPlaylist);
+    void refresh();
     void fillFromFavourites();
-    void setFavouritesFromFile(const QString& fileName);
+    void setFavourites(okPlaylist* newFavourites);
     void setSelected(int num);
     void setSelected(QTableWidgetItem* item);
     void starTrack(int row, bool star);
@@ -26,8 +35,8 @@ public:
 
     int getSelected();
     QString fileNameByRow(int row);
-    QStringList getPlaylist();
-    QStringList getFavouriteTracks();
+    okPlaylist* getPlaylist();
+    okPlaylist* getFavouriteTracks();
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
@@ -46,23 +55,34 @@ signals:
     void droppedMediaToAppend(const QString& path);
     void droppedMediaToReplace(const QString& path);
 
+public slots:
+    //ищет в именах треков в плейлисте подстроки query и показывает только найденные файлы
+    void matchTracks(QString query);
+
 private slots:
     void emitTrackSelected(QModelIndex i);
 
 private:
+    int currentPlaylist;
     QTableWidgetItem* selected;
-    QStringList playlist;
-    //синхронизирует звездочки из текущего плейлиста и из списка любимых треков
-    void updateFavourites();
-    void highlight(int row);
     //список любимых треков
-    QStringList favouriteTracks;
-
-    void clearList();
+    okPlaylist* favouriteTracks;
+    //история плейлистов
+    QList<okPlaylist*> playlistHistory;
 
     //действия контекстного меню
     QAction* playAction;
     QAction* removeAction;
+    QAction* openFolderAction;
+
+    //синхронизирует звездочки из текущего плейлиста и из списка любимых треков
+    void updateFavourites();
+    void highlight(int row);
+    void clearList();
+    void makeCurrentLast();
+
+    void navigateHistoryBack();
+    void navigateHistoryForward();
 };
 
 #endif // OKPLAYLISTWIDGET_H

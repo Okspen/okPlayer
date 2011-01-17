@@ -4,24 +4,45 @@
 
 okPlayerDb::okPlayerDb()
 {
+    isRunning = false;
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QApplication::applicationDirPath()+"/tracks.db");
     db.open();
     createTables();
+
+    tracks = okPlaylist(QCoreApplication::applicationDirPath()+"/dbqueue.m3u");
+    if(!tracks.isEmpty())
+    {
+        start();
+
+    }
 }
 
 okPlayerDb::~okPlayerDb()
 {
+    if(!tracks.isEmpty()) tracks.writeToFile(QCoreApplication::applicationDirPath()+"/dbqueue.m3u");
     db.close();
 }
 
 void okPlayerDb::run()
 {
-    QTime time;
-    time.start();
-    for(int i=0; i<trs.count(); i++)
-        addTrack(trs.at(i));
-    qDebug() << "finished in" << time.elapsed() << "ms";
+    isRunning = true;
+    setPriority(QThread::IdlePriority);
+    while(!tracks.isEmpty())
+    {
+        addTrack(tracks.takeFirst());
+        if(!isRunning) break;
+    }
+}
+
+void okPlayerDb::stop()
+{
+    isRunning = false;
+}
+
+int okPlayerDb::left()
+{
+    return tracks.count();
 }
 
 void okPlayerDb::createTables()
@@ -39,6 +60,12 @@ void okPlayerDb::createTables()
 
 void okPlayerDb::addTrack(QString path)
 {
+    QSqlQuery sql(db);
+    sql.prepare("select id from tracks where path=:path");
+    sql.bindValue(":path", path);
+    sql.exec();
+    if(sql.next()) return;
+
     QString album, artist, title;
     TagLib::FileRef f(path.toLocal8Bit().constData());
     if(!f.isNull())
@@ -49,7 +76,7 @@ void okPlayerDb::addTrack(QString path)
     }
     else qDebug() << "bad file:" << path.toLocal8Bit().constData();
 
-    QSqlQuery sql(db);
+
     int tArtistId = artistId(artist);
     int tAlbumId = albumId(album, tArtistId);
     if(title.isEmpty()) title = path.split("/").last();
@@ -62,11 +89,10 @@ void okPlayerDb::addTrack(QString path)
     sql.exec();
 }
 
-void okPlayerDb::addTracks(const QList<QString>& tracks)
+void okPlayerDb::addTracks(okPlaylist* newPlaylist)
 {
-    trs = tracks;
+    tracks.append(static_cast<QStringList>(*newPlaylist));
     start();
-    setPriority(QThread::LowPriority);
 }
 
 int okPlayerDb::artistId(QString artist)

@@ -10,9 +10,10 @@
 #include <QPalette>
 #include <QTreeWidget>
 #include <QMenu>
+#include <QTimer>
 #include "taglib/tag.h"
 #include "taglib/fileref.h"
-#include <statsdialog.h>
+#include "statsdialog.h"
 
 namespace Ui {
     class dbBrowser;
@@ -35,6 +36,7 @@ private slots:
     void fillArtists();
     void fillAlbums();
     void fillTracks();
+    void fillThreadData();
     void fillEditableData();
 
     void refreshDb();
@@ -48,13 +50,18 @@ private slots:
 
 private:
     Ui::dbBrowser *ui;
+    QTimer timer;
     okPlayerDb* db;
     QList<int> albumIds;
     QList<int> artistIds;
     QList<int> trackIds;
     QList<QString> tracks;
 
-    void createMenu();
+    int totalArtists;
+    int totalAlbums;
+    int totalTracks;
+
+    void countTotals();
     void fillSearchResultsSection(QString title, QSqlQuery q);
 };
 

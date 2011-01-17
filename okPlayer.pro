@@ -18,11 +18,11 @@ SOURCES += main.cpp \
     okWidgets/okseekslider.cpp \
     okWidgets/okplaylistwidget.cpp \
     okWidgets/okdirtreeview.cpp \
-    okWidgets/okplaylistlistwidget.cpp \
     savedialog.cpp \
     okplayerdb.cpp \
     dbbrowser.cpp \
-    statsdialog.cpp
+    statsdialog.cpp \
+    okplaylist.cpp
 HEADERS += mainwindow.h \
     okplayer.h \
     okhddthread.h \
@@ -34,11 +34,11 @@ HEADERS += mainwindow.h \
     okWidgets/okseekslider.h \
     okWidgets/okplaylistwidget.h \
     okWidgets/okdirtreeview.h \
-    okWidgets/okplaylistlistwidget.h \
     savedialog.h \
     okplayerdb.h \
     dbbrowser.h \
-    statsdialog.h
+    statsdialog.h \
+    okplaylist.h
 FORMS += mainwindow.ui \
 	aboutdialog.ui \
     savedialog.ui \

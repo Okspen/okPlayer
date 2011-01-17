@@ -58,17 +58,7 @@ public:
     QString getFSPath();
     QModelIndex getIndexFromPath(const QString& path);
 
-    //сохраняет плейлист в файл m3u
-    void playlistToFile(const QStringList& playlist, const QString& fileName);
-    //сохраняет текущий плейлист в файл m3u
-    void playlistToFile(const QString& fileName);
-    //читает плейлист из *.m3u
-    void playlistFromFile(const QString& fileName);
-
-    void playlistFromFavourites();
-
     int getCurrentTrack();
-
     int getPlayingMode();
 
     okPlayerDb* getDb();
@@ -103,6 +93,7 @@ private:
 
     void setInsertionState(InsertionMode newMode);
     void setPlayingModeState(PlayingMode newMode);
+
     /* методы задания плейлиста */
 
     //плейлист создается на основе элемента дерева (QModelIndex i) по которому кликнули
@@ -138,14 +129,12 @@ public slots:
     /* обертки для методов создания плейлистов */
 
     //создается новый плейлист
-    void newPlaylistFromIndex(QModelIndex i);
-    void newPlaylistFromIndex(QModelIndex i, bool onlyRoot);
+    void newPlaylistFromIndex(QModelIndex i, bool onlyRoot=false);
     void newPlaylistFromFile(const QString& fileName);
     void newPlaylistFromPath(const QString& path);
 
     //добавляется к текущему
-    void addToPlaylistFromIndex(QModelIndex i);
-    void addToPlaylistFromIndex(QModelIndex i, bool onlyRoot);
+    void addToPlaylistFromIndex(QModelIndex i, bool onlyRoot=false);
     void addToPlaylistFromThread();
     void addToPlaylistFromFile(const QString& fileName);
     void addToPlaylistFromPath(const QString& path);
@@ -153,15 +142,13 @@ public slots:
     //плейлист берется из треда
     void playlistFromThread();
 
-    //исчет в именах треков в плейлисте подстроки query и показывает только найденные файлы
-    void matchTracks(QString query);
-
     //тогглит элемент отображающий состояние "в избранном"
     void toggleTableStarItem(QTableWidgetItem* item);
 
     void setPlayingModeState(int newState);
 
-    //записывает песни добавленные в избранное в m3u-файл
+    //записывает сохраняет плейлисты в файл
+    void writeCurrentPlaylistToFile();
     void writeFavouritesToFile();
 };
 

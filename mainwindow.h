@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QSplitter>
+#include <QShortcut>
 #include <QFileDialog>
 #include <QProgressDialog>
 #include <QDesktopServices>
@@ -27,12 +28,11 @@ public:
 
 protected:
     void changeEvent(QEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     Ui::MainWindow *ui;
     okPlayer* player;
+    QShortcut* findInPlaylist;
     QSplitter* dirPlaylistSplitter;
 
     void setConnections();
@@ -44,12 +44,12 @@ private:
 
 private slots:
     void toggleOnTop(bool state);
+    void toggleSearchVisibility();
     void showAboutDialog();
     void openPlaylist();
     void savePlaylist();
     void copyPlaylist();
     void loadFavorites();
-    void loadPlaylist(QModelIndex i);
     void openHelp();
     void openMusicBrowser();
     void refreshFileSystem();

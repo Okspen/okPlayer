@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Music Browser</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -29,7 +29,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Музыкальный браузер&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Music Browser&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -54,9 +54,16 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="dbThreadStats">
+       <property name="text">
+        <string>0 left to add</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="statsButton">
        <property name="text">
-        <string>Статистика</string>
+        <string>Stats</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -68,11 +75,11 @@ p, li { white-space: pre-wrap; }
    <item row="1" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="artistsTab">
       <attribute name="title">
-       <string>Исполнители</string>
+       <string>Artists</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0" colspan="2">
@@ -93,7 +100,7 @@ p, li { white-space: pre-wrap; }
          <item row="0" column="1">
           <widget class="QPushButton" name="artistSaveButton">
            <property name="text">
-            <string>Сохранить</string>
+            <string>Save</string>
            </property>
           </widget>
          </item>
@@ -103,7 +110,7 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="albumsTab">
       <attribute name="title">
-       <string>Альбомы</string>
+       <string>Albums</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0" colspan="2">
@@ -134,7 +141,7 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="tracksTab">
       <attribute name="title">
-       <string>Песни</string>
+       <string>Tracks</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
@@ -144,17 +151,17 @@ p, li { white-space: pre-wrap; }
          </property>
          <column>
           <property name="text">
-           <string>Название</string>
+           <string>Title</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Исполнитель</string>
+           <string>Artist</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Альбом</string>
+           <string>Album</string>
           </property>
          </column>
         </widget>
@@ -177,7 +184,7 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="searchTab">
       <attribute name="title">
-       <string>Поиск</string>
+       <string>Search</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="0" colspan="4">
@@ -201,7 +208,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="3">
         <widget class="QPushButton" name="searchButton">
          <property name="text">
-          <string>Искать</string>
+          <string>Search</string>
          </property>
         </widget>
        </item>

@@ -194,7 +194,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="okTrackTimeLabel" name="label">
+       <widget class="okTrackTimeLabel" name="timeLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -257,7 +257,7 @@
       <item>
        <widget class="QComboBox" name="playModeBox">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -422,11 +422,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="sizeGripEnabled">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -454,6 +449,11 @@
    </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuView_2"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
   </widget>
   <action name="actionAlways_on_top">
    <property name="checkable">

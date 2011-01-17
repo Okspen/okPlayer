@@ -10,6 +10,7 @@
 #include <QThread>
 #include <QTime>
 #include <QVariant>
+#include "okplaylist.h"
 
 #include <QDebug>
 
@@ -20,14 +21,17 @@ public:
     ~okPlayerDb();
 
     void run();
+    void stop();
+    int left();
 
     void createTables();
     void addTrack(QString path);
-    void addTracks(const QList<QString>& tracks);
+    void addTracks(okPlaylist* playlist);
 
 private:
     QSqlDatabase db;
-    QList<QString> trs;
+    okPlaylist tracks;
+    bool isRunning;
 
     int artistId(QString artist);
     int albumId(QString album, int artistId);

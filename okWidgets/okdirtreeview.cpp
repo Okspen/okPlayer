@@ -1,4 +1,5 @@
 #include "okdirtreeview.h"
+#include <QDebug>
 
 okDirTreeView::okDirTreeView(QWidget *parent) : QTreeView(parent)
 {

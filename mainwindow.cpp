@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     dirPlaylistSplitter->addWidget(ui->dirTree);
     ui->splitterLayout->addWidget(dirPlaylistSplitter);
 
-    ui->dirTree->installEventFilter(this);
-    ui->playlistWidget->installEventFilter(this);
+    findInPlaylist = new QShortcut(QKeySequence::Find, this);
+    connect(findInPlaylist, SIGNAL(activated()), this, SLOT(toggleSearchVisibility()));
 
     ui->searchWidget->hide();
 
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     player->setTreeWidget(ui->dirTree);
     player->setSeekSlider(ui->sliderSeek);
 
-    ui->label->setVLC(player->getVLCWrapper());
+    ui->timeLabel->setVLC(player->getVLCWrapper());
 
     setConnections();
     restoreSettings();
@@ -32,6 +32,7 @@ MainWindow::~MainWindow()
 {
     saveSettings();
     delete player;
+    delete findInPlaylist;
     delete dirPlaylistSplitter;
     delete ui;
 }
@@ -52,7 +53,7 @@ void MainWindow::setConnections()
 
     connect(ui->sliderVolume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
 
-    connect(ui->fieldQuickSearch, SIGNAL(textChanged(QString)), player, SLOT(matchTracks(QString)));
+    connect(ui->fieldQuickSearch, SIGNAL(textChanged(QString)), ui->playlistWidget, SLOT(matchTracks(QString)));
 
     connect(ui->playlistWidget, SIGNAL(itemClicked(QTableWidgetItem*)), player, SLOT(toggleTableStarItem(QTableWidgetItem*)));
     connect(ui->playlistWidget, SIGNAL(droppedMediaToReplace(QString)), player, SLOT(newPlaylistFromPath(QString)));
@@ -88,32 +89,16 @@ void MainWindow::changeEvent(QEvent *event)
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if(event->matches(QKeySequence::Find))
-    {
-        bool visible = ui->searchWidget->isVisibleTo(this);
-        ui->searchWidget->setVisible(!visible);
-        if(visible) ui->fieldQuickSearch->setFocus(Qt::ShortcutFocusReason);
-    }
-    QMainWindow::keyPressEvent(event);
-}
-
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress)
-    {
-        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        keyPressEvent(keyEvent);
-    }
-    return QMainWindow::eventFilter(obj, event);
-}
-
 void MainWindow::toggleOnTop(bool checked)
 {
     if(checked) setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     else setWindowFlags(windowFlags() & ~Qt::WindowStaysOnTopHint);
     show();
+}
+
+void MainWindow::toggleSearchVisibility()
+{
+    ui->searchWidget->setVisible(!ui->searchWidget->isVisible());
 }
 
 void MainWindow::showAboutDialog()
@@ -124,7 +109,7 @@ void MainWindow::showAboutDialog()
 
 void MainWindow::saveSettings()
 {
-    player->playlistToFile("current.m3u");
+    ui->playlistWidget->getPlaylist()->writeToFile("current.m3u");
     //перед выходом нужно сохранить избранное
     player->writeFavouritesToFile();
 
@@ -152,7 +137,7 @@ void MainWindow::restoreSettings()
     player->setVolume(settings.value("player/volume").toInt(ok));
     ui->sliderVolume->setValue(player->getVolume());
 
-    ui->playlistWidget->setFavouritesFromFile("favourites.m3u");
+    ui->playlistWidget->setFavourites(new okPlaylist(QCoreApplication::applicationDirPath()+"/favourites.m3u"));
 
     player->restorePlaylist(settings.value("player/playlist").toString());
     ui->playlistWidget->setSelected(settings.value("player/currentTrack").toInt());
@@ -181,14 +166,14 @@ void MainWindow::restoreSettings()
 void MainWindow::openPlaylist()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Playlist"), "", tr("Playlist (*.m3u)"));
-    player->playlistFromFile(fileName);
+    ui->playlistWidget->replace(new okPlaylist(fileName));
 }
 
 void MainWindow::savePlaylist()
 {
     savedialog dialog(this);
     if(dialog.exec() == 1)
-        player->playlistToFile(dialog.fileName());
+    ui->playlistWidget->getPlaylist()->writeToFile(dialog.fileName());
 }
 
 void MainWindow::copyPlaylist()
@@ -199,10 +184,11 @@ void MainWindow::copyPlaylist()
     fileDialog.setOption(QFileDialog::ShowDirsOnly);
     if(!fileDialog.exec()) return;
 
+    QString path;
     QString dir = fileDialog.selectedFiles().first();
-    QStringList playlist = ui->playlistWidget->getPlaylist();
+    okPlaylist* playlist = ui->playlistWidget->getPlaylist();
 
-    int numFiles = playlist.count();
+    int numFiles = playlist->count();
     QProgressDialog progress("Copying files...", "Abort", 0, numFiles, this);
     progress.setWindowModality(Qt::WindowModal);
 
@@ -211,19 +197,15 @@ void MainWindow::copyPlaylist()
         progress.setValue(i);
         if(progress.wasCanceled()) break;
 
-        QFile::copy(playlist.at(i), dir+"/"+playlist.at(i).split("/").last());
+        path = dir+"/"+playlist->at(i).split("/").last();
+        QFile::copy(playlist->at(i), path);
     }
     progress.setValue(numFiles);
 }
 
 void MainWindow::loadFavorites()
 {
-    player->playlistFromFavourites();
-}
-
-void MainWindow::loadPlaylist(QModelIndex i)
-{
-    player->playlistFromFile(i.data(Qt::UserRole).toString());
+    ui->playlistWidget->fillFromFavourites();
 }
 
 void MainWindow::openHelp()
@@ -233,7 +215,7 @@ void MainWindow::openHelp()
 
 void MainWindow::openMusicBrowser()
 {
-    dbBrowser musicBrowser;
+    dbBrowser musicBrowser(this);
     musicBrowser.setDb(player->getDb());
     musicBrowser.exec();
 }

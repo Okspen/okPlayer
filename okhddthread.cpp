@@ -4,13 +4,14 @@ okHddThread::okHddThread()
 {
     append = false;
     onlyRoot = false;
+    playlist = 0;
 }
 
 okHddThread::okHddThread(const QStringList& extensions, bool newAppend)
 {
+    okHddThread();
     append = newAppend;
     setFileExt(extensions);
-    onlyRoot = false;
 }
 
 void okHddThread::run()
@@ -20,7 +21,7 @@ void okHddThread::run()
     totalFilesCount = 0;
     time.start();
 
-    playlist = scanMediaFiles(path);
+    playlist = new okPlaylist(scanMediaFiles(path));
 }
 
 QStringList okHddThread::scanMediaFiles(const QString& path)
@@ -68,7 +69,7 @@ void okHddThread::setPath(const QString &newPath)
     path = newPath;
 }
 
-QStringList okHddThread::getPlaylist()
+okPlaylist* okHddThread::getPlaylist()
 {
     return playlist;
 }

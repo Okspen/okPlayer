@@ -1,8 +1,6 @@
 #include "dbbrowser.h"
 #include "ui_dbbrowser.h"
 
-#include <QAxObject>
-
 dbBrowser::dbBrowser(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::dbBrowser)
@@ -25,6 +23,14 @@ dbBrowser::dbBrowser(QWidget *parent) :
     connect(ui->artistsTable, SIGNAL(itemSelectionChanged()), this, SLOT(fillEditableData()));
     connect(ui->albumsTable, SIGNAL(itemSelectionChanged()), this, SLOT(fillEditableData()));
     connect(ui->tracksTable, SIGNAL(itemSelectionChanged()), this, SLOT(fillEditableData()));
+
+    countTotals();
+
+    timer.start(1000);
+    connect(&timer, SIGNAL(timeout()), this, SLOT(fillThreadData()));
+    connect(&timer, SIGNAL(timeout()), this, SLOT(fillArtists()));
+    connect(&timer, SIGNAL(timeout()), this, SLOT(fillAlbums()));
+    connect(&timer, SIGNAL(timeout()), this, SLOT(fillTracks()));
 
     refreshDb();
 }
@@ -83,72 +89,101 @@ void dbBrowser::saveTrack()
 
 void dbBrowser::fillArtists()
 {
-    QSqlQuery q("select id, name from artists");
-    if(!q.exec())
-        qDebug() << "Query exec() error." << q.lastError();
+    int start = ui->artistsTable->rowCount()+1;
+    if(start >= totalArtists) return;
+
+    QSqlQuery sql;
+    sql.prepare("select id, name from artists limit :start, :end");
+    sql.bindValue(":start", start);
+    sql.bindValue(":end", start+250);
+
+    if(!sql.exec())
+        qDebug() << "Query exec() error." << sql.lastError();
 
     ui->artistsTable->setRowCount(0);
     ui->artistsTable->setColumnCount(1);
 
-    int row = 0;
+    int row = start-1;
     QTableWidgetItem* temp=0;
 
-    while (q.next())
+    while (sql.next())
     {
         ui->artistsTable->insertRow(row);
-        temp = new QTableWidgetItem(q.value(1).toString());
+        temp = new QTableWidgetItem(sql.value(1).toString());
         temp->setFlags(temp->flags() & (~Qt::ItemIsEditable));
 
         ui->artistsTable->setItem(row,0,temp);
-        artistIds.append(q.value(0).toInt());
+        artistIds.append(sql.value(0).toInt());
         row++;
     }
 }
 
 void dbBrowser::fillAlbums()
 {
-    QSqlQuery q("select id, name from albums");
-    if(!q.exec())
-        qDebug() << "Query exec() error." << q.lastError();
+    int start = ui->albumsTable->rowCount()+1;
+    if(start >= totalAlbums) return;
+
+    QSqlQuery sql;
+    sql.prepare("select id, name from albums limit :start, :end");
+    sql.bindValue(":start", start);
+    sql.bindValue(":end", start+250);
+
+    if(!sql.exec())
+        qDebug() << "Query exec() error." << sql.lastError();
 
     ui->albumsTable->setRowCount(0);
     ui->albumsTable->setColumnCount(1);
     int row = 0;
     QTableWidgetItem* temp=0;
-    while (q.next())
+    while (sql.next())
     {
         ui->albumsTable->insertRow(row);
-        temp = new QTableWidgetItem(q.value(1).toString());
+        temp = new QTableWidgetItem(sql.value(1).toString());
         temp->setFlags(temp->flags() & (~Qt::ItemIsEditable));
 
         ui->albumsTable->setItem(row, 0, temp);
-        albumIds.append(q.value(1).toInt());
+        albumIds.append(sql.value(1).toInt());
         row++;
     }
 }
 
 void dbBrowser::fillTracks()
 {
-    QSqlQuery q("select tracks.id, tracks.title, artists.name, albums.name from tracks, artists, albums where albums.id=tracks.albumId and artists.id=tracks.artistId");
-    if(!q.exec())
-        qDebug() << "Query exec() error." << q.lastError();
+    int start = ui->tracksTable->rowCount()+1;
+    qDebug() << start << totalTracks;
+    if(start >= totalTracks) return;
+
+    QSqlQuery sql;
+    sql.prepare("select tracks.id, tracks.title, artists.name, albums.name from tracks, artists, albums where albums.id=tracks.albumId and artists.id=tracks.artistId limit :start, :end");
+    sql.bindValue(":start", start);
+    sql.bindValue(":end", start+500);
+
+    if(!sql.exec())
+        qDebug() << "Query exec() error." << sql.lastError();
 
     ui->tracksTable->setRowCount(0);
     tracks.clear();
     int row = 0;
     QTableWidgetItem* temp=0;
-    while (q.next())
+    while (sql.next())
     {
         ui->tracksTable->insertRow(row);
         for(int i=1; i<4; i++)
         {
-            temp = new QTableWidgetItem(q.value(i).toString());
+            temp = new QTableWidgetItem(sql.value(i).toString());
             temp->setFlags(temp->flags() & (~Qt::ItemIsEditable));
             ui->tracksTable->setItem(row,i-1,temp);
         }
-        trackIds.append(q.value(0).toInt());
+        trackIds.append(sql.value(0).toInt());
         row++;
     }
+}
+
+void dbBrowser::fillThreadData()
+{
+    int left = db->left();
+    if(left == 0) ui->dbThreadStats->clear();
+    else ui->dbThreadStats->setText(QString("%1 left to add").arg(left));
 }
 
 void dbBrowser::fillEditableData()
@@ -174,9 +209,9 @@ void dbBrowser::refreshDb()
     fillArtists();
     fillTracks();
 
-    ui->albumsTable->resizeColumnsToContents();
-    ui->artistsTable->resizeColumnsToContents();
-    ui->tracksTable->resizeColumnsToContents();
+//    ui->albumsTable->resizeColumnsToContents();
+//    ui->artistsTable->resizeColumnsToContents();
+//    ui->tracksTable->resizeColumnsToContents();
 }
 
 void dbBrowser::truncateDb()
@@ -325,6 +360,22 @@ void dbBrowser::showStats()
     stats.setAvgArtistAlbumCount(avgAlbumCount);
     stats.setAvgAlbumSongCount(avgSongsInAlbum);
     stats.exec();
+}
+
+void dbBrowser::countTotals()
+{
+    QSqlQuery sql;
+    sql.exec("select count(artists.id) from artists");
+    sql.next();
+    totalArtists = sql.value(0).toInt();
+
+    sql.exec("select count(albums.id) from albums");
+    sql.next();
+    totalAlbums = sql.value(0).toInt();
+
+    sql.exec("select count(tracks.id) from tracks");
+    sql.next();
+    totalTracks = sql.value(0).toInt();
 }
 
 void dbBrowser::fillSearchResultsSection(QString title, QSqlQuery q)

@@ -8,14 +8,14 @@ okPlayer::okPlayer()
     vlc->setDb(db);
 
     //устанавливаем фильтры для отображения файлов
-    fileExt << "*.wav" << "*.mp3" << "*.ogg" << "*.wma" << "*.flac";
+    fileExt << "*.wav" << "*.mp3" << "*.ogg" << "*.wma" << "*.flac" << "*.m4a";
     hddThread = new okHddThread(fileExt);
 
     connect(hddThread, SIGNAL(finished()), this, SLOT(playlistFromThread()));
     //connect(hddThread, SIGNAL(statsUpdated(int,int,int,QString)), this, SLOT(updateStats(int,int,int,QString)));
 
     fsModel = new QFileSystemModel;
-    fsModel->setRootPath("/");
+    fsModel->setRootPath("");
     fsModel->setNameFilters(fileExt);
     //делаем так, чтоб лишние файлы не показывались в дереве
     fsModel->setNameFilterDisables(false);
@@ -28,6 +28,7 @@ okPlayer::okPlayer()
 
 okPlayer::~okPlayer()
 {
+    db->stop();
     delete db;
     delete vlc;
     delete hddThread;
@@ -86,29 +87,19 @@ void okPlayer::play()
     if(vlc->isPlaying() || !vlc->isFileSet())
     {
         QList<QTableWidgetItem*> list = playlistWidget->selectedItems();
-        int count = list.count();
-        if(count>0)
-        {
-            int row=0;
-            int col=0;
-            for(int i=0; i<count; i++)
-            {
-                row = list.at(i)->row();
-                col = list.at(i)->column();
-                if(col==0)
-                {
-                    play(row);
-                    return;
-                }
-            }
-        }
+        if(list.isEmpty()) return;
+        play(list.first()->row());
     }
     vlc->play();
 }
 
 void okPlayer::play(int num)
 {
-    if(num<0 || num>=playlistWidget->rowCount()) return;
+    if(num<0 || num>=playlistWidget->rowCount())
+    {
+        stop(); play();
+        return;
+    }
     play(playlistWidget->fileNameByRow(num));
     playlistWidget->setSelected(num);
 }
@@ -221,30 +212,6 @@ int okPlayer::getVolume()
     return vlc->getVolume();
 }
 
-void okPlayer::matchTracks(QString query)
-{
-    if(query.length() == 0)
-    {
-        //восстанавливаем состояние виджета на основе плейлиста
-        int count = playlistWidget->rowCount();
-        for(int i=0; i<count; i++)
-                playlistWidget->showRow(i);
-        return;
-    }
-    //выбираем треки, которые подходят и прячем ряд, если трек не подходит
-    int count = playlistWidget->rowCount();
-    QString path;
-
-    for(int i=0; i<count; i++)
-    {
-        path = playlistWidget->item(i, 0)->data(Qt::DisplayRole).toString();
-        //если в имени файла есть запрашиваемая частица (подстрока)
-        if(path.contains(query, Qt::CaseInsensitive))
-            playlistWidget->showRow(i);
-        else playlistWidget->hideRow(i);
-    }
-}
-
 void okPlayer::playlistFromIndex(QModelIndex i, bool onlyRoot)
 {
     playlistFromPath(fsModel->filePath(i), onlyRoot);
@@ -268,82 +235,42 @@ void okPlayer::playlistFromPath(const QString& path, bool onlyRoot)
     }
     else
     {
+        QString extension = path.right(path.length() - path.lastIndexOf(".")).toLower();
         //если это плейлист, который, кстати, не может попасть через дерево папок
-        if(path.right(path.length() - path.lastIndexOf(".")).toLower() == ".m3u")
+        if(extension == ".m3u")
         {
-            playlistFromFile(path);
+            playlistWidget->replace(new okPlaylist(path));
+            return;
+        }
+        else if(!fileExt.contains("*"+extension))
+        {
+            qDebug() << "unsupported file type";
             return;
         }
 
         QStringList src;
         src << path;
-        playlistWidget->fillFromList(src, append);
-
-        if(!append) play(0);
+        if(append) playlistWidget->append(src);
+        else
+        {
+            playlistWidget->replace(src);
+            play(0);
+        }
     }
 }
 
 void okPlayer::playlistFromThread()
 {
-    playlistWidget->fillFromList(hddThread->getPlaylist(), hddThread->getAppend());
-    db->addTracks(hddThread->getPlaylist());
+    okPlaylist* list = hddThread->getPlaylist();
 
-    if(insertionState == Replace) play(0);
-}
-
-void okPlayer::playlistFromFile(const QString &fileName)
-{
-    QFile file(fileName);
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    db->addTracks(list);
+    if(hddThread->getAppend())
+        playlistWidget->append(list);
+    else
     {
-        qDebug() << "Couldn't open file" << fileName;
-        return;
+        playlistWidget->replace(list);
+        play(0);
     }
-
-    QTextStream in(&file);
-    in.setCodec("UTF-8");
-
-    QStringList src;
-    QString line;
-    QString dir = QFileInfo(file).absoluteDir().path();
-    while(!in.atEnd())
-    {
-        line = in.readLine();
-        if(QFile::exists(line)) src << line;
-        if(QFile::exists(dir+"/"+line)) src << dir+"/"+line;
-    }
-    file.close();
-    playlistWidget->fillFromList(src);
-}
-
-void okPlayer::playlistToFile(const QStringList &playlist, const QString& fileName)
-{
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
-
-    QTextStream out(&file);
-    out.setCodec("UTF-8");
-    QString track;
-    foreach(track, playlist)
-    {
-        out << track << "\n";
-    }
-    file.close();
-}
-
-void okPlayer::playlistToFile(const QString& fileName)
-{
-    playlistToFile(playlistWidget->getPlaylist(), fileName);
-}
-
-void okPlayer::playlistFromFavourites()
-{
-    playlistWidget->fillFromFavourites();
-}
-
-void okPlayer::newPlaylistFromIndex(QModelIndex i)
-{
-    newPlaylistFromIndex(i, false);
 }
 
 void okPlayer::newPlaylistFromIndex(QModelIndex i, bool onlyRoot)
@@ -356,7 +283,7 @@ void okPlayer::newPlaylistFromIndex(QModelIndex i, bool onlyRoot)
 void okPlayer::newPlaylistFromFile(const QString& fileName)
 {
     setInsertionState(Replace);
-    playlistFromFile(fileName);
+    playlistWidget->replace(new okPlaylist(fileName));
     play(0);
 }
 
@@ -369,11 +296,6 @@ void okPlayer::newPlaylistFromPath(const QString &path)
     if(!fInfo.isDir()) play(0);
 }
 
-void okPlayer::addToPlaylistFromIndex(QModelIndex i)
-{
-    addToPlaylistFromIndex(i, false);
-}
-
 void okPlayer::addToPlaylistFromIndex(QModelIndex i, bool onlyRoot)
 {
     setInsertionState(Append);
@@ -382,8 +304,7 @@ void okPlayer::addToPlaylistFromIndex(QModelIndex i, bool onlyRoot)
 
 void okPlayer::addToPlaylistFromFile(const QString& fileName)
 {
-    setInsertionState(Append);
-    playlistFromFile(fileName);
+    playlistWidget->append(new okPlaylist(fileName));
 }
 
 void okPlayer::addToPlaylistFromThread()
@@ -408,9 +329,16 @@ void okPlayer::setPlayingModeState(PlayingMode newMode)
     playingModeState = newMode;
 }
 
+void okPlayer::writeCurrentPlaylistToFile()
+{
+    QString path = QApplication::applicationDirPath()+"/current.m3u";
+    playlistWidget->getPlaylist()->writeToFile(path);
+}
+
 void okPlayer::writeFavouritesToFile()
 {
-    playlistToFile(playlistWidget->getFavouriteTracks(), QApplication::applicationDirPath()+"/favourites.m3u");
+    QString path = QApplication::applicationDirPath()+"/favourites.m3u";
+    playlistWidget->getFavouriteTracks()->writeToFile(path);
 }
 
 void okPlayer::restorePlaylist(const QString &fileName)
@@ -431,7 +359,7 @@ void okPlayer::restorePlaylist(const QString &fileName)
         }
         return;
     }
-    playlistFromFile(fileName);
+    playlistWidget->replace(new okPlaylist(fileName));
 }
 
 okVLCWrapper* okPlayer::getVLCWrapper()
