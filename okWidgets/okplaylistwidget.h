@@ -30,7 +30,6 @@ public:
     void setFavourites(okPlaylist* newFavourites);
     void setSelected(int num);
     void setSelected(QTableWidgetItem* item);
-    void starTrack(int row, bool star);
     void removeTrack(int row);
 
     int getSelected();
@@ -61,6 +60,8 @@ public slots:
 
 private slots:
     void emitTrackSelected(QModelIndex i);
+    //тогглит элемент отображающий состояние "в избранном"
+    void toggleStarItem(QTableWidgetItem *tableItem);
 
 private:
     int currentPlaylist;

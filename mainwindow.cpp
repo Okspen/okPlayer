@@ -55,7 +55,6 @@ void MainWindow::setConnections()
 
     connect(ui->fieldQuickSearch, SIGNAL(textChanged(QString)), ui->playlistWidget, SLOT(matchTracks(QString)));
 
-    connect(ui->playlistWidget, SIGNAL(itemClicked(QTableWidgetItem*)), player, SLOT(toggleTableStarItem(QTableWidgetItem*)));
     connect(ui->playlistWidget, SIGNAL(droppedMediaToReplace(QString)), player, SLOT(newPlaylistFromPath(QString)));
     connect(ui->playlistWidget, SIGNAL(droppedMediaToAppend(QString)), player, SLOT(addToPlaylistFromPath(QString)));
     connect(ui->playlistWidget, SIGNAL(trackSelected(QString)), player, SLOT(play(QString)));

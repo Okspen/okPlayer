@@ -11,6 +11,7 @@ okPlaylistWidget::okPlaylistWidget(QWidget *parent) :
     openFolderAction = new QAction("Open containing folder", this);
 
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(emitTrackSelected(QModelIndex)));
+    connect(this, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(toggleStarItem(QTableWidgetItem*)));
 }
 
 okPlaylistWidget::~okPlaylistWidget()
@@ -272,6 +273,28 @@ void okPlaylistWidget::highlight(int row)
     }
 }
 
+void okPlaylistWidget::toggleStarItem(QTableWidgetItem *tableItem)
+{
+    if(tableItem->column() == 0) return;
+    okTableStarItem* starItem = static_cast<okTableStarItem*>(tableItem);
+    starItem->toggle();
+
+    QString fileName = item(tableItem->row(), 0)->data(Qt::ToolTipRole).toString();
+    int count = rowCount();
+    bool star = starItem->isChecked();
+    okTableStarItem* tempStarItem = 0;
+
+    //проходим по всему плейлисту, чтобы все одинаковые файлы тоже были помечены звездочкой
+    for(int i=0; i<count; i++)
+    {
+        if(item(i,0)->data(Qt::ToolTipRole).toString() == fileName)
+        {
+            tempStarItem = static_cast<okTableStarItem*>(item(i,1));
+            tempStarItem->setChecked(star);
+        }
+    }
+}
+
 void okPlaylistWidget::emitTrackSelected(QModelIndex i)
 {
     setSelected(item(i.row(), i.column()));
@@ -311,22 +334,6 @@ void okPlaylistWidget::setSelected(QTableWidgetItem *item)
 
     highlight(item->row());
     selected = item;
-}
-
-void okPlaylistWidget::starTrack(int row, bool star)
-{
-    QString fileName = item(row, 0)->data(Qt::ToolTipRole).toString();
-    int count = rowCount();
-    okTableStarItem* tempStarItem = 0;
-
-    for(int i=0; i<count; i++)
-    {
-        if(item(i,0)->data(Qt::ToolTipRole).toString() == fileName)
-        {
-            tempStarItem = (okTableStarItem*) item(i,1);
-            tempStarItem->setChecked(star);
-        }
-    }
 }
 
 void okPlaylistWidget::removeTrack(int row)

@@ -142,9 +142,6 @@ public slots:
     //плейлист берется из треда
     void playlistFromThread();
 
-    //тогглит элемент отображающий состояние "в избранном"
-    void toggleTableStarItem(QTableWidgetItem* item);
-
     void setPlayingModeState(int newState);
 
     //записывает сохраняет плейлисты в файл

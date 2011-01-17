@@ -197,16 +197,6 @@ void okPlayer::setPlayingModeState(int newState)
     }
 }
 
-void okPlayer::toggleTableStarItem(QTableWidgetItem *item)
-{
-    if(item->column() == 0) return;
-	okTableStarItem* item2;
-	item2 = (okTableStarItem*) item;
-	item2->toggle();
-
-	playlistWidget->starTrack(item->row(), item2->isChecked());
-}
-
 int okPlayer::getVolume()
 {
     return vlc->getVolume();
