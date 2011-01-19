@@ -17,6 +17,7 @@ SOURCES += main.cpp \
     okWidgets/oktablestaritem.cpp \
     okWidgets/okseekslider.cpp \
     okWidgets/okplaylistwidget.cpp \
+    okWidgets/okplaypausebutton.cpp \
     okWidgets/okdirtreeview.cpp \
     savedialog.cpp \
     okplayerdb.cpp \
@@ -33,6 +34,7 @@ HEADERS += mainwindow.h \
     okWidgets/oktablestaritem.h \
     okWidgets/okseekslider.h \
     okWidgets/okplaylistwidget.h \
+    okWidgets/okplaypausebutton.h \
     okWidgets/okdirtreeview.h \
     savedialog.h \
     okplayerdb.h \
