@@ -17,7 +17,6 @@ okPlaylist::okPlaylist(const QString& fileName)
         qDebug() << fileName << "is too big";
         return;
     }
-
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
 
