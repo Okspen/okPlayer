@@ -20,6 +20,16 @@ okPlayPauseButton::okPlayPauseButton(QWidget *parent) :
     machine.start();
 }
 
+void okPlayPauseButton::setExternalTransitions(okVLCWrapper *vlc)
+{
+    play->addTransition(vlc, SIGNAL(played()), pause);
+    pause->addTransition(vlc, SIGNAL(paused()), play);
+    pause->addTransition(vlc, SIGNAL(stopped()), play);
+
+    connect(play, SIGNAL(propertiesAssigned()), vlc, SLOT(pause()));
+    connect(pause, SIGNAL(propertiesAssigned()), vlc, SLOT(play()));
+}
+
 okPlayPauseButton::~okPlayPauseButton()
 {
     delete play;

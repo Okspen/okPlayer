@@ -3,6 +3,7 @@
 
 #include <QToolButton>
 #include <QStateMachine>
+#include "okvlcwrapper.h"
 
 class okPlayPauseButton : public QToolButton
 {
@@ -10,6 +11,7 @@ class okPlayPauseButton : public QToolButton
 public:
     explicit okPlayPauseButton(QWidget *parent = 0);
     ~okPlayPauseButton();
+    void setExternalTransitions(okVLCWrapper *vlc);
     QState* play;
     QState* pause;
 
