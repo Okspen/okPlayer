@@ -12,14 +12,14 @@ public:
     explicit okPlayPauseButton(QWidget *parent = 0);
     ~okPlayPauseButton();
     void setExternalTransitions(okVLCWrapper *vlc);
-    QState* play;
-    QState* pause;
 
 signals:
 
 public slots:
 
 private:
+    QState* play;
+    QState* pause;
     QStateMachine machine;
 
 };
