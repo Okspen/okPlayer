@@ -40,7 +40,6 @@ MainWindow::~MainWindow()
 void MainWindow::setConnections()
 {
     ui->buttonPlayPause->setExternalTransitions(player->vlc);
-    connect(ui->buttonStop, SIGNAL(clicked()), player->vlc, SLOT(stop()));
 
     connect(ui->buttonPrev, SIGNAL(clicked()), player, SLOT(prev()));
     connect(ui->buttonNext, SIGNAL(clicked()), player, SLOT(next()));
