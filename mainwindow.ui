@@ -27,6 +27,29 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
+       <widget class="QToolButton" name="buttonPrev">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Previous</string>
+        </property>
+        <property name="text">
+         <string>|&lt;</string>
+        </property>
+        <property name="icon">
+         <iconset resource="icons.qrc">
+          <normaloff>:/tango/images/icons/tango/media-skip-backward.png</normaloff>:/tango/images/icons/tango/media-skip-backward.png</iconset>
+        </property>
+        <property name="autoRaise">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="buttonStop">
         <property name="minimumSize">
          <size>
@@ -59,68 +82,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="buttonPause">
-        <property name="minimumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Pause</string>
-        </property>
+       <widget class="okPlayPauseButton" name="buttonPlayPause">
         <property name="text">
-         <string>||</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/tango/images/icons/tango/media-playback-pause.png</normaloff>:/tango/images/icons/tango/media-playback-pause.png</iconset>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="buttonPlay">
-        <property name="minimumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Play</string>
-        </property>
-        <property name="text">
-         <string>&gt;</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/tango/images/icons/tango/media-playback-start.png</normaloff>:/tango/images/icons/tango/media-playback-start.png</iconset>
-        </property>
-        <property name="autoRaise">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="buttonPrev">
-        <property name="minimumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Previous</string>
-        </property>
-        <property name="text">
-         <string>|&lt;</string>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/tango/images/icons/tango/media-skip-backward.png</normaloff>:/tango/images/icons/tango/media-skip-backward.png</iconset>
+         <string/>
         </property>
         <property name="autoRaise">
          <bool>true</bool>
@@ -525,6 +489,11 @@
    <class>okPlaylistWidget</class>
    <extends>QTableWidget</extends>
    <header location="global">okWidgets/okplaylistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>okPlayPauseButton</class>
+   <extends>QToolButton</extends>
+   <header>okWidgets/okplaypausebutton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

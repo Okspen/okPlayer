@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     player->setTreeWidget(ui->dirTree);
     player->setSeekSlider(ui->sliderSeek);
 
-    ui->timeLabel->setVLC(player->getVLCWrapper());
+    ui->timeLabel->setVLC(player->vlc);
 
     setConnections();
     restoreSettings();
@@ -39,9 +39,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setConnections()
 {
-    connect(ui->buttonStop, SIGNAL(clicked()), player, SLOT(stop()));
-    connect(ui->buttonPause, SIGNAL(clicked()), player, SLOT(pause()));
-    connect(ui->buttonPlay, SIGNAL(clicked()), player, SLOT(play()));
+    ui->buttonPlayPause->setExternalTransitions(player->vlc);
+    connect(ui->buttonStop, SIGNAL(clicked()), player->vlc, SLOT(stop()));
+
     connect(ui->buttonPrev, SIGNAL(clicked()), player, SLOT(prev()));
     connect(ui->buttonNext, SIGNAL(clicked()), player, SLOT(next()));
     connect(ui->buttonRandom, SIGNAL(clicked()), player, SLOT(playRandom()));
