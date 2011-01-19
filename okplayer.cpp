@@ -12,7 +12,6 @@ okPlayer::okPlayer()
     hddThread = new okHddThread(fileExt);
 
     connect(hddThread, SIGNAL(finished()), this, SLOT(playlistFromThread()));
-    //connect(hddThread, SIGNAL(statsUpdated(int,int,int,QString)), this, SLOT(updateStats(int,int,int,QString)));
 
     fsModel = new QFileSystemModel;
     fsModel->setRootPath("");
@@ -84,12 +83,6 @@ void okPlayer::pause()
 
 void okPlayer::play()
 {
-    if(vlc->isPlaying() || !vlc->isFileSet())
-    {
-        QList<QTableWidgetItem*> list = playlistWidget->selectedItems();
-        if(list.isEmpty()) return;
-        play(list.first()->row());
-    }
     vlc->play();
 }
 
@@ -350,11 +343,6 @@ void okPlayer::restorePlaylist(const QString &fileName)
         return;
     }
     playlistWidget->replace(new okPlaylist(fileName));
-}
-
-okVLCWrapper* okPlayer::getVLCWrapper()
-{
-    return vlc;
 }
 
 QString okPlayer::getFSPath()

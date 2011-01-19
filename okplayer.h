@@ -52,7 +52,7 @@ public:
     //возвращает список расширений файлов, которые можно добавлять при сканировании
     QStringList getFileExt();
     //возвращает указатель на объект обертки VLC
-    okVLCWrapper* getVLCWrapper();
+    okVLCWrapper* vlc;
 
     //возвращает текущий открытый путь в окне dirTree
     QString getFSPath();
@@ -70,7 +70,6 @@ public:
 
 private:
     okPlayerDb* db;
-    okVLCWrapper* vlc;
     okHddThread* hddThread;
 
     //список расширений файлов, которые можно добавлять при сканировании
