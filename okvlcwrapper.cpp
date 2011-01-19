@@ -54,17 +54,23 @@ void okVLCWrapper::setDb(okPlayerDb* newDb)
 
 void okVLCWrapper::play()
 {
+    if(isPlaying()) return;
     libvlc_media_player_play(player);
+    emit played();
 }
 
 void okVLCWrapper::pause()
 {
+    if(isPaused()) return;
     libvlc_media_player_pause(player);
+    emit paused();
 }
 
 void okVLCWrapper::stop()
 {
+    if(isStopped()) return;
     libvlc_media_player_stop(player);
+    emit stopped();
 }
 
 void okVLCWrapper::setVolume(int newVol)
@@ -113,7 +119,7 @@ bool okVLCWrapper::isPaused()
 
 bool okVLCWrapper::isStopped()
 {
-    return (libvlc_media_player_get_state(player) == libvlc_Paused);
+    return (libvlc_media_player_get_state(player) == libvlc_Stopped);
 }
 
 bool okVLCWrapper::isEnded()

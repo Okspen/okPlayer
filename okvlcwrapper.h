@@ -30,9 +30,8 @@ public:
     bool isFileSet();
 
 public slots:
-    void pause();
     void play();
-    //void setTickInterval(qint32 newTickInterval);
+    void pause();
     void stop();
     void setVolume(int newVol);
     void setPosition(int newPos);
@@ -53,6 +52,9 @@ private:
     bool fileSet;
 
 signals:
+    void played();
+    void paused();
+    void stopped();
     void tick();
     void finished();
 };
