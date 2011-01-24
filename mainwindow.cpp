@@ -53,6 +53,7 @@ void MainWindow::setConnections()
     connect(ui->sliderVolume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));
 
     connect(ui->fieldQuickSearch, SIGNAL(textChanged(QString)), ui->playlistWidget, SLOT(matchTracks(QString)));
+    connect(ui->buttonClearSearch, SIGNAL(clicked()), ui->fieldQuickSearch, SLOT(clear()));
 
     connect(ui->playlistWidget, SIGNAL(droppedMediaToReplace(QString)), player, SLOT(newPlaylistFromPath(QString)));
     connect(ui->playlistWidget, SIGNAL(droppedMediaToAppend(QString)), player, SLOT(addToPlaylistFromPath(QString)));
