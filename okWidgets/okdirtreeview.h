@@ -13,14 +13,19 @@ public:
     okDirTreeView(QWidget *parent);
     ~okDirTreeView();
 
+    QString currentPath();
+    void setCurrentPath(const QString& path);
+    void setAllowedExtensions(const QStringList& extensions);
+
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
 
 signals:
-    void midClicked(QModelIndex);
-    void newPlaylist(QModelIndex, bool);
-    void addToPlaylist(QModelIndex, bool);
+    void midClicked(QString);
+    void newPlaylist(QString, bool);
+    void addToPlaylist(QString, bool);
 
 private:
     QAction* appendFileAction;
@@ -29,6 +34,9 @@ private:
     QAction* appendRootFilesAction;
     QAction* replaceAllFilesAction;
     QAction* replaceRootFilesAction;
+
+    QFileSystemModel* fsModel;
+    QStringList allowedExtensions;
 };
 
 #endif // OKDIRTREEVIEW_H
