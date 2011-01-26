@@ -19,8 +19,6 @@ okPlaylistWidget::~okPlaylistWidget()
     delete playAction;
     delete removeAction;
     delete openFolderAction;
-    for(int i=0; i<playlistHistory.count(); i++)
-        delete playlistHistory[i];
 }
 
 void okPlaylistWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -31,15 +29,15 @@ void okPlaylistWidget::mouseReleaseEvent(QMouseEvent *event)
         int row = indexAt(event->pos()).row();
         removeTrack(row);
     }
-    //назад
+    //"back" mouse button
     if(button == Qt::XButton1)
     {
-        navigateHistoryBack();
+        emit historyBack();
     }
-    //вперед
+    //"forward" mouse button
     if(button == Qt::XButton2)
     {
-        navigateHistoryForward();
+        emit historyForward();
     }
     QTableWidget::mouseReleaseEvent(event);
 }
@@ -56,11 +54,11 @@ void okPlaylistWidget::keyPressEvent(QKeyEvent *event)
     }
     if(key == Qt::Key_Left)
     {
-        navigateHistoryBack();
+        emit historyBack();
     }
     if(key == Qt::Key_Right)
     {
-        navigateHistoryForward();
+        emit historyForward();
     }
     QTableWidget::keyPressEvent(event);
 }
@@ -131,7 +129,7 @@ void okPlaylistWidget::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-void okPlaylistWidget::matchTracks(QString query)
+void okPlaylistWidget::matchTracks(const QString& query)
 {
     int count = rowCount();
     if(query.length() == 0)
@@ -154,65 +152,16 @@ void okPlaylistWidget::matchTracks(QString query)
     }
 }
 
-void okPlaylistWidget::append(okPlaylist* newPlaylist)
+void okPlaylistWidget::changePlaylist(okPlaylist *newPlaylist)
 {
-    okPlaylist* list = playlistHistory[currentPlaylist];
-    for(int i=0; i<newPlaylist->count(); i++)
-        list->append(newPlaylist->at(i));
-
-    delete newPlaylist;
+    playlist = newPlaylist;
     refresh();
-}
-
-void okPlaylistWidget::append(const QStringList &newPlaylist)
-{
-    playlistHistory[currentPlaylist]->append(newPlaylist);
-    refresh();
-}
-
-void okPlaylistWidget::replace(okPlaylist* newPlaylist)
-{
-    makeCurrentLast();
-    //чтобы не накапливались пустые плейлисты
-    bool playlistExists = (currentPlaylist!=-1);
-    if(playlistExists && playlistHistory[currentPlaylist]->isEmpty())
-    {
-        append(newPlaylist);
-    }
-    else
-    {
-        if(playlistExists && *playlistHistory[currentPlaylist] == *newPlaylist) return;
-
-        playlistHistory.append(newPlaylist);
-        currentPlaylist++;
-        refresh();
-    }
-}
-
-void okPlaylistWidget::replace(const QStringList &newPlaylist)
-{
-    makeCurrentLast();
-    //чтобы не накапливались пустые плейлисты
-    bool playlistExists = (currentPlaylist!=-1);
-    if(playlistExists && playlistHistory[currentPlaylist]->isEmpty())
-    {
-        append(newPlaylist);
-    }
-    else
-    {
-        if(playlistExists && *playlistHistory[currentPlaylist] == okPlaylist(newPlaylist)) return;
-
-        playlistHistory.append(new okPlaylist(newPlaylist));
-        currentPlaylist++;
-        refresh();
-    }
 }
 
 void okPlaylistWidget::refresh()
 {
     updateFavourites();
 
-    okPlaylist* playlist = playlistHistory[currentPlaylist];
     int rowCount = playlist->count();
     setRowCount(rowCount);
 
@@ -243,7 +192,7 @@ void okPlaylistWidget::refresh()
 void okPlaylistWidget::fillFromFavourites()
 {
     updateFavourites();
-    replace(*favouriteTracks);
+    //replace(*favouriteTracks);
 }
 
 void okPlaylistWidget::setFavourites(okPlaylist* newFavourites)
@@ -315,7 +264,7 @@ QString okPlaylistWidget::fileNameByRow(int row)
 
 okPlaylist* okPlaylistWidget::getPlaylist()
 {
-    return playlistHistory.last();
+    return playlist;
 }
 
 okPlaylist* okPlaylistWidget::getFavouriteTracks()
@@ -342,7 +291,7 @@ void okPlaylistWidget::removeTrack(int row)
     //нужно присвоить нулю, чтобы потом к нему не было обращения
     if((selected != 0) && (row == selected->row())) selected = 0;
     removeRow(row);
-    playlistHistory[currentPlaylist]->removeAt(row);
+    playlist->removeAt(row);
 }
 
 void okPlaylistWidget::updateFavourites()
@@ -381,36 +330,4 @@ void okPlaylistWidget::clearList()
     updateFavourites();
     setRowCount(0);
     selected = 0;
-}
-
-void okPlaylistWidget::makeCurrentLast()
-{
-    int hcount = playlistHistory.count();
-
-    if(currentPlaylist < hcount-1) //если текущий плейлист не последний
-        for(int i=hcount-1; i>currentPlaylist; i--)
-        {
-            delete playlistHistory[i];
-            playlistHistory.removeAt(i);
-        }
-}
-
-void okPlaylistWidget::navigateHistoryBack()
-{
-    int index = currentPlaylist-1;
-    if(index>=0 && index<playlistHistory.count())
-    {
-        currentPlaylist--;
-        refresh();
-    }
-}
-
-void okPlaylistWidget::navigateHistoryForward()
-{
-    int index = currentPlaylist+1;
-    if(index>=0 && index<playlistHistory.count())
-    {
-        currentPlaylist++;
-        refresh();
-    }
 }

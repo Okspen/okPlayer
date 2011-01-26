@@ -21,11 +21,7 @@ class okPlaylistWidget : public QTableWidget
 public:
     explicit okPlaylistWidget(QWidget *parent = 0);
     ~okPlaylistWidget();
-    void append(okPlaylist* newPlaylist);
-    void append(const QStringList& newPlaylist);
-    void replace(okPlaylist* newPlaylist);
-    void replace(const QStringList& newPlaylist);
-    void refresh();
+
     void fillFromFavourites();
     void setFavourites(okPlaylist* newFavourites);
     void setSelected(int num);
@@ -49,14 +45,19 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event);
 
 signals:
-    void midClicked(QModelIndex i);
+    void midClicked(const QModelIndex& i);
     void trackSelected(const QString& trackPath);
     void droppedMediaToAppend(const QString& path);
     void droppedMediaToReplace(const QString& path);
 
+    void historyBack();
+    void historyForward();
+
 public slots:
     //ищет в именах треков в плейлисте подстроки query и показывает только найденные файлы
-    void matchTracks(QString query);
+    void matchTracks(const QString& query);
+    void refresh();
+    void changePlaylist(okPlaylist* newPlaylist);
 
 private slots:
     void emitTrackSelected(QModelIndex i);
@@ -66,12 +67,12 @@ private slots:
 private:
     int currentPlaylist;
     QTableWidgetItem* selected;
-    //список любимых треков
+    //current playlist pointer
+    okPlaylist* playlist;
+    //list of favourite tracks
     okPlaylist* favouriteTracks;
-    //история плейлистов
-    QList<okPlaylist*> playlistHistory;
 
-    //действия контекстного меню
+    //item context menu actions
     QAction* playAction;
     QAction* removeAction;
     QAction* openFolderAction;
@@ -80,10 +81,6 @@ private:
     void updateFavourites();
     void highlight(int row);
     void clearList();
-    void makeCurrentLast();
-
-    void navigateHistoryBack();
-    void navigateHistoryForward();
 };
 
 #endif // OKPLAYLISTWIDGET_H
