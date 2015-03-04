@@ -1,7 +1,7 @@
 #ifndef BASSPLAYER_H
 #define BASSPLAYER_H
 
-#include "bass/bass.h"
+#include "bass/c/bass.h"
 #include <QWidget>
 #include <QFile>
 #include <QTimer>

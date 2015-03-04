@@ -11,7 +11,7 @@ win32:RC_ICONS += images/icons/okplayer.ico
 
 QT += widgets
 
-INCLUDEPATH += include "." "include/bass"
+INCLUDEPATH += include "." "include/bass/c" "include/tags/c"
 
 DEFINES += NOMINMAX
 

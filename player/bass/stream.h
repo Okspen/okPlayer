@@ -1,7 +1,7 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include "bass/bass.h"
+#include "bass/c/bass.h"
 #include <QObject>
 #include <QFile>
 #include <QUrl>

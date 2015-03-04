@@ -8,16 +8,7 @@
 #include <QDebug>
 #include "mediainfo.h"
 
-//#define TAGLIB_STATIC
-//#include "taglib/taglib.h"
-//#include "taglib/tag.h"
-//#include "taglib/fileref.h"
-//#include "taglib/mpegfile.h"
-//#include "taglib/id3v1tag.h"
-//#include "taglib/id3v2tag.h"s
-
-#include "basstags/c/tags.h"
-
+#include "tags/c/tags.h"
 #include "bass/localstream.h"
 
 class TagReader : public QObject
