@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/tango">
+        <file>images/icons/tango/media-playback-pause.png</file>
+        <file>images/icons/tango/media-playback-start.png</file>
+        <file>images/icons/tango/media-skip-backward.png</file>
+        <file>images/icons/tango/media-skip-forward.png</file>
+        <file>images/icons/tango/star_checked.png</file>
+        <file>images/icons/tango/star_unchecked.png</file>
+        <file>images/icons/tango/download.png</file>
+        <file>images/icons/tango/audio-volume-high.png</file>
+        <file>images/icons/tango/audio-volume-low.png</file>
+        <file>images/icons/tango/audio-volume-medium.png</file>
+        <file>images/icons/tango/audio-volume-muted.png</file>
+        <file>images/icons/tango/go-up.png</file>
+        <file>images/icons/tango/folder-saved-search.png</file>
+        <file>images/icons/tango/process-stop.png</file>
+    </qresource>
+    <qresource prefix="/gnome-icon-theme">
+        <file>images/icons/gnome-icon-theme/media-playlist-repeat.png</file>
+        <file>images/icons/gnome-icon-theme/media-playlist-shuffle.png</file>
+        <file>images/icons/gnome-icon-theme/emblem-unreadable.png</file>
+        <file>images/icons/gnome-icon-theme/close.png</file>
+    </qresource>
+    <qresource prefix="/app">
+        <file>images/icons/okplayer.ico</file>
+    </qresource>
+</RCC>
