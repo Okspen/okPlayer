@@ -3,6 +3,7 @@
 MediaInfo::MediaInfo(const QUrl &url)
 {
     m_url = url;
+    m_duration = 0;
 
     if (m_url.isLocalFile()) {
         QFileInfo fileInfo(url.toLocalFile());
