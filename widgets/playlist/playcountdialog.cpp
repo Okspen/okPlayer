@@ -9,6 +9,8 @@ PlayCountDialog::PlayCountDialog(QWidget *parent) :
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     connect(ui->setButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+    setFixedSize(width(), height());
 }
 
 PlayCountDialog::~PlayCountDialog()
