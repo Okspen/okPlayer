@@ -77,8 +77,12 @@ void PlaylistWidget::setFilter(const QString &pattern)
 void PlaylistWidget::setFavoritesFilterEnabled(bool enabled)
 {
     m_favFilterModel->setEnabled(enabled);
-    if (enabled)
+    if (enabled) {
         ui->listView->setEmptyMessage("No Favorites in this playlist");
+    }
+
+    int index = Player::instance()->cycler()->current().index();
+    ui->listView->scrollTo(sortIndex(index), QAbstractItemView::PositionAtCenter);
 }
 
 QModelIndex PlaylistWidget::sortIndex(int row) const
