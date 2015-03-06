@@ -18,7 +18,8 @@ public:
         LocalRole       = Qt::UserRole + 6,
         CurrentRole     = Qt::UserRole + 7,
         TimeRole        = Qt::UserRole + 8,
-        SearchRole      = Qt::UserRole + 9
+        DurationRole    = Qt::UserRole + 9,
+        SearchRole      = Qt::UserRole + 10
     };
 
     explicit PlaylistModel(QObject *parent = 0);

@@ -84,8 +84,8 @@ void TagReader::readTagsBASS(MediaInfo *info)
 
     BASS::LocalStream bs(url, this);
     HSTREAM s = bs.handler();
+    int seconds = bs.lengthSeconds();
 
-    //qDebug() << TAGS_Read(s, "%IFV1(%TRCK,%TRCK. )%IFV2(%ARTI,%ICAP(%ARTI),no artist) - %IFV2(%TITL,%ICAP(%TITL) -,no title -)%IFV1(%ALBM, %IUPC(%ALBM))%IFV1(%YEAR, %(%YEAR%))");
     artist = TAGS_Read(s, "%UTF8(%ARTI)");
     album = TAGS_Read(s, "%UTF8(%ALBM)");
     title = TAGS_Read(s, "%UTF8(%TITL)");
@@ -135,6 +135,7 @@ void TagReader::readTagsBASS(MediaInfo *info)
     info->setAlbum(album);
     info->setArtist(artist);
     info->setTitle(title);
+    info->setDuration(seconds);
 }
 
 /*void TagReader::parseID3V2(const char *id3v2)

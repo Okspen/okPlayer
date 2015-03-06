@@ -12,6 +12,7 @@ public:
     QString artist() const;
     QString album() const;
     QString title() const;
+    int     duration() const;
 
     QString fileName() const;
     QString ext() const;
@@ -26,10 +27,13 @@ public:
     void setAlbum(const QString &album);
     void setTitle(const QString &title);
 
+    void setDuration(int duration);
+
 protected:
     QString m_artist;
     QString m_album;
     QString m_title;
+    int     m_duration;
 
     QString m_fileName;
     QString m_extension;

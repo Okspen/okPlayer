@@ -21,7 +21,7 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         if (m_active)
             localOption.state = localOption.state | QStyle::State_Active;
     } else if (localOption.state & QStyle::State_Selected) {
-            localOption.state = localOption.state & (~QStyle::State_Selected);
+        localOption.state = localOption.state & (~QStyle::State_Selected);
     }
 
     QStyle *style = localOption.widget->style();
@@ -29,7 +29,8 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     /* Painting time */
 
-    QString time = index.data(PlaylistModel::TimeRole).toString();
+    QString time = index.data(PlaylistModel::DurationRole).toString();
+    qDebug() << time << "<-- time";
     int timeWidth = option.fontMetrics.width(time);
 
     QRect timeRect(option.rect.right() - m_margin - option.rect.height() - m_margin - timeWidth,
@@ -50,7 +51,7 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     QRect textRect(option.rect.left() + m_margin,
                     option.rect.top() + m_margin,
-                    option.rect.width() - 4*m_margin - favoriteRect.width() - timeRect.width(),
+                    option.rect.width() - 4 * m_margin - favoriteRect.width() - timeRect.width(),
                     option.rect.height());
     QString mainText = index.data(Qt::DisplayRole).toString();
     QString elidedText = option.fontMetrics.elidedText(mainText, Qt::ElideRight, textRect.width());

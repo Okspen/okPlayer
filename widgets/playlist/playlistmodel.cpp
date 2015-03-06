@@ -79,6 +79,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
     QString artist;
     QString album;
     QString searchString;
+    QString duration;
 
     if (m_media != 0) {
         MediaInfo *mediaInfo = m_media->info(url);
@@ -86,6 +87,15 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         artist      = mediaInfo->artist();
         album       = mediaInfo->album();
         searchString = mediaInfo->searchString();
+
+        int durationSeconds = mediaInfo->duration();
+        if (durationSeconds > 0) {
+            QString format = "m:ss";
+            if (durationSeconds > 60*60)
+                format = "H:mm:ss";
+            duration = QTime(0,0,0,0).addSecs(mediaInfo->duration()).toString(format);
+        }
+        qDebug() << "duration" << duration << durationSeconds;
     }
 
     if (role == Qt::DisplayRole) {
@@ -137,6 +147,10 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         PlayId current = m_cycler->current();
         if (PlayId(m_playlist, row) == current)
             return m_currentTime;
+    }
+
+    if (role == DurationRole) {
+        return duration;
     }
 
     if (role == SearchRole)

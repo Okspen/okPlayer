@@ -28,6 +28,11 @@ QString MediaInfo::title() const
     return m_title;
 }
 
+int MediaInfo::duration() const
+{
+    return m_duration;
+}
+
 QString MediaInfo::fileName() const
 {
     return m_fileName;
@@ -88,6 +93,11 @@ void MediaInfo::setTitle(const QString &title)
 {
     m_title = title;
     updateSearchString();
+}
+
+void MediaInfo::setDuration(int duration)
+{
+    m_duration = duration;
 }
 
 void MediaInfo::updateSearchString()
