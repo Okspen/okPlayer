@@ -28,8 +28,6 @@ private:
 
     void readTags(MediaInfo *info);
     void readTagsBASS(MediaInfo *info);
-    //void parseID3V2(const char * id3v2);
-    //QString toQString(const TagLib::String& str, TagLib::ID3v1::Tag *id3v1=0, TagLib::ID3v2::Tag *id3v2=0);
 
 signals:
     void processed(MediaInfo *item);
