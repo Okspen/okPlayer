@@ -74,6 +74,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 
     int row = index.row();
     QUrl url = m_playlist->at(row);
+    int playCount = m_playlist->playCount(row);
 
     QString title;
     QString artist;
@@ -94,6 +95,9 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
             if (durationSeconds > 60*60)
                 format = "H:mm:ss";
             duration = QTime(0,0,0,0).addSecs(mediaInfo->duration()).toString(format);
+
+            if (playCount > 1)
+                duration.prepend(QString("%1 * ").arg(playCount));
         }
     }
 
@@ -152,6 +156,10 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         return duration;
     }
 
+    if (role == PlayCountRole) {
+        return playCount;
+    }
+
     if (role == SearchRole)
         return searchString;
 
@@ -174,6 +182,11 @@ bool PlaylistModel::setData(const QModelIndex &index, const QVariant &value, int
         isFavorite ? m_favorites->add(url) : m_favorites->remove(url);
 
         return true;
+    }
+
+    if (role == PlayCountRole) {
+        int val = value.toInt();
+        m_playlist->setPlayCount(row, val);
     }
 
     if (role == CurrentRole && value.toBool()) {

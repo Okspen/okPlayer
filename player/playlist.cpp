@@ -10,24 +10,40 @@ Playlist::Playlist(QObject *parent)
 Playlist::Playlist(const QList<QUrl> &other, QObject *parent)
     : QObject(parent)
 {
-    m_urls.append(other);
+    append(other);
 }
 
 void Playlist::append(const QUrl &t)
 {
     m_urls.append(t);
+    m_playCount.append(1);
+
     emit countChanged();
 }
 
 void Playlist::append(const QList<QUrl> &other)
 {
     m_urls.append(other);
+
+    for (int i=0; i < other.count(); ++i)
+        m_playCount.append(1);
+
     emit countChanged();
 }
 
 const QUrl &Playlist::at(int i) const
 {
     return m_urls.at(i);
+}
+
+int Playlist::playCount(int i) const
+{
+    return m_playCount.at(i);
+}
+
+void Playlist::setPlayCount(int i, int count)
+{
+    m_playCount.replace(i, count);
 }
 
 int Playlist::count() const
@@ -65,22 +81,19 @@ void Playlist::removeAt(int i, int count)
     if (count < 1)
         return;
 
-    if (count == 1)
+    if (count == 1) {
         m_urls.removeAt(i);
+        m_playCount.removeAt(i);
+    }
 
     if (count > 1)
-        for (int r = 0; r < count; ++r)
+        for (int r = 0; r < count; ++r) {
             m_urls.removeAt(i);
+            m_playCount.removeAt(i);
+        }
 
     emit removed(i, count);
     emit countChanged();
-}
-
-int Playlist::removeAll(const QUrl &t)
-{
-    int r = m_urls.removeAll(t);
-    emit countChanged();
-    return r;
 }
 
 QList<QUrl> Playlist::urls() const

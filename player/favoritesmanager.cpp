@@ -42,6 +42,6 @@ void FavoritesManager::remove(const QUrl &url)
     if (!isFavorite(url))
         return;
 
-    m_favorites->removeAll(url);
+    m_favorites->removeAt(m_favorites->indexOf(url));
     emit removed(url);
 }

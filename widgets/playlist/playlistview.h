@@ -16,6 +16,7 @@
 #include "mediadroppeddialog.h"
 #include "player/player.h"
 #include "player/playersettings.h"
+#include "widgets/playlist/playcountdialog.h"
 
 class PlaylistView : public QListView
 {

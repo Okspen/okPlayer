@@ -30,7 +30,6 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     /* Painting time */
 
     QString time = index.data(PlaylistModel::DurationRole).toString();
-    qDebug() << time << "<-- time";
     int timeWidth = option.fontMetrics.width(time);
 
     QRect timeRect(option.rect.right() - m_margin - option.rect.height() - m_margin - timeWidth,

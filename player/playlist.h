@@ -18,6 +18,8 @@ public:
     void append(const QList<QUrl> &other);
 
     const QUrl &at(int i) const;
+    int playCount(int i) const;
+    void setPlayCount(int i, int count);
 
     int count() const;
     int uniqueCount() const;
@@ -49,6 +51,7 @@ signals:
 protected:
     QString     m_name;
     QList<QUrl> m_urls;
+    QList<int>  m_playCount;
 };
 
 #endif // PLAYLIST_H

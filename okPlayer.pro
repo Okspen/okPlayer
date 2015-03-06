@@ -56,7 +56,8 @@ SOURCES += main.cpp \
     widgets/history/historymodel.cpp \
     widgets/history/historywidget.cpp \
     widgets/playlist/favoritesfiltermodel.cpp \
-    player/playorder.cpp
+    player/playorder.cpp \
+    widgets/playlist/playcountdialog.cpp
 
 HEADERS += mainwindow.h \
     aboutdialog.h \
@@ -98,7 +99,8 @@ HEADERS += mainwindow.h \
     widgets/history/historymodel.h \
     widgets/history/historywidget.h \
     widgets/playlist/favoritesfiltermodel.h \
-    player/playorder.h
+    player/playorder.h \
+    widgets/playlist/playcountdialog.h
 
 FORMS += mainwindow.ui \
     aboutdialog.ui \
@@ -109,7 +111,8 @@ FORMS += mainwindow.ui \
     widgets/fs/filesystemwidget.ui \
     widgets/fs/scanprogressdialog.ui \
     widgets/playlist/playlistwidget.ui \
-    widgets/history/historywidget.ui
+    widgets/history/historywidget.ui \
+    widgets/playlist/playcountdialog.ui
 
 RESOURCES += icons.qrc
 

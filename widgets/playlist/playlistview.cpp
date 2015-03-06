@@ -81,6 +81,9 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
     QAction playAction("Play", this);
     playAction.setEnabled(indexIsValid);
 
+    QAction playSeveralTimes("Play Several Times", this);
+    playSeveralTimes.setEnabled(indexIsValid);
+
     bool isFavorite = index.data(PlaylistModel::FavoriteRole).toBool();
     QString favoritesText = (isFavorite) ? "Remove from Favorites" : "Add to Favorites";
     QAction favoritesAction(favoritesText, this);
@@ -95,6 +98,7 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
 
     QMenu menu;
     menu.addAction(&playAction);
+    menu.addAction(&playSeveralTimes);
     menu.addAction(&favoritesAction);
     menu.addAction(&openFolder);
     menu.addAction(&removeAction);
@@ -104,6 +108,16 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
     QAction* resultAction = menu.exec(event->globalPos());
     if (resultAction == &playAction) {
         model()->setData(index, true, PlaylistModel::CurrentRole);
+        return;
+    }
+
+    if (resultAction == &playSeveralTimes) {
+        PlayCountDialog d(this);
+        d.setPlayCount(index.data(PlaylistModel::PlayCountRole).toInt());
+
+        int result = d.exec();
+        if (result > 0)
+            model()->setData(index, d.playCount(), PlaylistModel::PlayCountRole);
         return;
     }
 

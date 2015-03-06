@@ -98,12 +98,20 @@ void PlayOrder::next()
     if (m_order.isEmpty())
         return;
 
-    ++m_index;
-    if (m_index >= m_order.count()) {
-        m_index = 0;
+    int count = m_playlist->playCount(currentIndex());
+    --count;
+    if (count == 0) {
+        m_playlist->setPlayCount(currentIndex(), 1);
 
-        if (m_shuffle)
-            shuffleOrder();
+        ++m_index;
+        if (m_index >= m_order.count()) {
+            m_index = 0;
+
+            if (m_shuffle)
+                shuffleOrder();
+        }
+    } else {
+        m_playlist->setPlayCount(currentIndex(), count);
     }
 }
 
