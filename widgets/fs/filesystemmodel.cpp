@@ -37,10 +37,7 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         return info.filePath();
 
     if (role == Qt::DecorationRole)
-        //return m_iconProvider.icon(info);
-        //return m_iconCache.value(info.suffix());
         return (info.isDir()) ? m_iconProvider.icon(QFileIconProvider::Folder) : m_iconCache.value(info.suffix());
-        //return QVariant();
 
     if (role == FavoriteRole) {
         if (!m_favorites) return false;

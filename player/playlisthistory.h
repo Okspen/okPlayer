@@ -19,7 +19,6 @@ public:
 signals:
     void currentChanged(Playlist*);
     void countChanged();
-    //void updated(Playlist*);
 
 public slots:
     void prev();

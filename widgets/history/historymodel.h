@@ -16,7 +16,6 @@ public:
 
 public slots:
     void changePlaylist(Playlist *playlist);
-    //void updatePlaylist(Playlist *playlist);
 
 private:
     PlaylistHistory     *m_history;

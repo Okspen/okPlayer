@@ -8,7 +8,6 @@
 #include "scanprogressdialog.h"
 #include "filesystemmodel.h"
 #include "filesystemitemdelegate.h"
-//#include "misc/filelistgenerator.h"
 
 namespace Ui {
 class FileSystemWidget;

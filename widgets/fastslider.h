@@ -13,8 +13,6 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *ev);
-//    void mouseReleaseEvent(QMouseEvent *ev);
-//    void mouseMoveEvent(QMouseEvent *ev);
 };
 
 #endif // FASTSLIDER_H

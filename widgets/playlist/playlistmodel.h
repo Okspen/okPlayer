@@ -55,8 +55,6 @@ private slots:
     void onTrackChanged(PlayId id);
     void onMediaChanged(const QUrl &url);
     void onPlaylistDestroyed();
-    //void onPositionChanged(qint32 position, qint32 total);
-    //void updateTrackTime();
 };
 
 #endif // PLAYLISTMODEL_H

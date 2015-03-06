@@ -95,7 +95,6 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
                 format = "H:mm:ss";
             duration = QTime(0,0,0,0).addSecs(mediaInfo->duration()).toString(format);
         }
-        qDebug() << "duration" << duration << durationSeconds;
     }
 
     if (role == Qt::DisplayRole) {
@@ -259,24 +258,3 @@ void PlaylistModel::onPlaylistDestroyed()
     m_playlist = 0;
     emit endResetModel();
 }
-
-//void PlaylistModel::onPositionChanged(qint32 position, qint32 total)
-//{
-//    if (m_playlist != m_current.playlist()) return;
-
-//    m_currentTime = BASS::Core::timeToString(position, total);
-//    //m_currentTime = QString("%1/%2").arg(position).arg(total);
-//    QModelIndex index = createIndex(m_current.index(), 0);
-//    emit dataChanged(index, index, QVector<int>() << TimeRole);
-//}
-
-//void PlaylistModel::updateTrackTime()
-//{
-//    if (m_playlist != m_current.playlist()) return;
-
-//    m_currentTime = BASS::Core::timeToString(Player::instance()->audio()->positionSeconds(),
-//                                             Player::instance()->audio()->lengthSeconds());
-//    //m_currentTime = QString("%1/%2").arg(position).arg(total);
-//    QModelIndex index = createIndex(m_current.index(), 0);
-//    emit dataChanged(index, index, QVector<int>() << TimeRole);
-//}

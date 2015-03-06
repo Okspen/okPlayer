@@ -7,15 +7,6 @@ MediaLibrary::MediaLibrary(QObject *parent) :
     m_readerThread = 0;
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(processQueue()));
-
-//    m_readerThread  = new QThread;
-//    m_reader        = new TagReader;
-//    m_reader->moveToThread(m_readerThread);
-
-//    connect(m_reader,       SIGNAL(processed(MediaInfo*)),  this,       SLOT(onProcessed(MediaInfo*)));
-//    connect(m_readerThread, SIGNAL(finished()),             m_reader,   SLOT(deleteLater()));
-
-//    m_readerThread->start();
 }
 
 MediaLibrary::~MediaLibrary()
@@ -52,15 +43,6 @@ void MediaLibrary::findInfo(Playlist *playlist)
     for (int i=0; i<playlist->count(); ++i)
         info(playlist->at(i));
 }
-
-//void MediaLibrary::insert(MediaInfo *info)
-//{
-//    QUrl url = info->url();
-//    if (m_info.contains(url))
-//        delete m_info.value(url);
-
-//    m_info.insert(url, info);
-//}
 
 void MediaLibrary::onProcessed(MediaInfo *item)
 {

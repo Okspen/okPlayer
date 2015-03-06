@@ -55,15 +55,6 @@ void PlaylistHistory::switchPlaylist(int index)
         return;
 
     m_currentIndex = index;
-//    if (index == 0) {
-//        m_current = m_playlists->begin();
-//    } else if (index == m_playlists->count()) {
-//        m_current = m_playlists->end();
-//    } else {
-//        m_current = m_playlists->begin();
-//        for (int i=0; i<index; i++)
-//            ++m_current;
-//    }
 
     emit currentChanged(m_playlists->at(m_currentIndex));
 }
@@ -76,7 +67,6 @@ void PlaylistHistory::deleteCurrentPlaylist()
     int count = m_playlists->count();
 
     if (count == 1) {
-        //emit currentChanged(0);
         delete m_playlists->takeAt(m_currentIndex);
         m_currentIndex = -1;
         emit countChanged();
@@ -124,15 +114,6 @@ void PlaylistHistory::replaceCurrent(Playlist *playlist)
     emit currentChanged(m_playlists->at(m_currentIndex));
     emit countChanged();
 }
-
-//void PlaylistHistory::appendCurrent(Playlist playlist)
-//{
-//    if (playlist.isEmpty() || !inRange(m_currentIndex))
-//        return;
-
-//    m_playlists->at(m_currentIndex)->append(playlist.urls());
-//    emit updated(m_playlists->at(m_currentIndex));
-//}
 
 QList<Playlist*>* PlaylistHistory::playlists() const
 {

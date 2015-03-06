@@ -20,33 +20,6 @@ SeekSlider::SeekSlider(QWidget* parent)
     connect(this,   SIGNAL(positionChanged(qreal)),         audio,  SLOT(setPosition(qreal)));
 }
 
-//void SeekSlider::mouseReleaseEvent(QMouseEvent *e)
-//{
-//    FastSlider::mouseReleaseEvent(e);
-
-//    qreal pos = (double) value() / (double) maximum();
-//    emit positionChanged(pos);
-//}
-
-//void SeekSlider::mouseMoveEvent(QMouseEvent *e)
-//{
-//    FastSlider::mouseMoveEvent(e);
-
-//    QTime positionTime = QTime(0,0).addSecs(m_position);
-//    QTime lengthTime = QTime(0,0).addSecs(m_length);
-
-//    QString format;
-
-//    if (m_length >= 3600 * 1000) // more than hour
-//        format = "h:mm:ss";
-//    else
-//        format = "mm:ss";
-
-//    QToolTip::showText(e->globalPos(),
-//                       positionTime.toString(format) + " / " + lengthTime.toString(format),
-//                       this);
-//}
-
 void SeekSlider::updatePosition(qint32 position, qint32 length)
 {
     if (m_receivePosition == false)

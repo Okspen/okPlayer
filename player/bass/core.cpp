@@ -74,7 +74,6 @@ bool Core::isMuted() const
 bool Core::isLooped() const
 {
     return m_looped;
-    //return BASS_ChannelFlags(m_stream, 0, 0) & BASS_SAMPLE_LOOP;
 }
 
 int Core::volume() const

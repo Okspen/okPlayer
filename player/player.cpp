@@ -21,19 +21,11 @@ Player::Player(QObject *parent) :
 {
     m_audio         = new BASS::Core;
     m_audio->init();
-//    QThread *thread = new QThread;
-//    m_audio->moveToThread(thread);
-
-//    connect(thread, SIGNAL(started()),  m_audio,    SLOT(init()));
-//    connect(thread, SIGNAL(finished()), thread,     SLOT(deleteLater()));
-//    connect(thread, SIGNAL(finished()), m_audio,    SLOT(deleteLater()));
-//    thread->start();
 
     m_cycler    = new TrackCycler(this);
     m_history   = new PlaylistHistory(this);
     m_folder    = new FolderPlayer(this);
     m_favorites = new FavoritesManager(this);
-    //m_media = 0;
     m_media     = new MediaLibrary(this);
 
     connect(m_cycler,   SIGNAL(trackChanged(QUrl)), m_audio,    SLOT(play(QUrl)));

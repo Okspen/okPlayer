@@ -7,7 +7,6 @@ FastSlider::FastSlider(QWidget *parent) :
 
 void FastSlider::mousePressEvent(QMouseEvent *ev)
 {
-    //QSlider::mousePressEvent(ev);
     if (ev->button() == Qt::LeftButton)
     {
         if (orientation() == Qt::Vertical)

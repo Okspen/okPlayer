@@ -1,5 +1,5 @@
-#ifndef OKSEEKSLIDER_H
-#define OKSEEKSLIDER_H
+#ifndef SEEKSLIDER_H
+#define SEEKSLIDER_H
 
 #include <QSlider>
 #include <QMouseEvent>
@@ -18,10 +18,6 @@ public:
 public slots:
     void updatePosition(qint32 position, qint32 length);
 
-protected:
-    //void mouseReleaseEvent(QMouseEvent *e);
-    //void mouseMoveEvent(QMouseEvent *e);
-
 signals:
     void positionChanged(qreal);
 
@@ -38,4 +34,4 @@ private slots:
     void translateValue(int value);
 };
 
-#endif // OKSEEKSLIDER_H
+#endif // SEEKSLIDER_H
