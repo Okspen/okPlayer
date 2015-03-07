@@ -3,7 +3,10 @@
 PlaylistView::PlaylistView(QWidget *parent) :
     QListView(parent)
 {
+    setAcceptDrops(true);
+
     m_emptyMessage          = "Empty playlist";
+
     m_showFavoritesAction   = new QAction("Show Only Favorites", this);
     m_showFavoritesAction->setCheckable(true);
     connect(m_showFavoritesAction, SIGNAL(toggled(bool)), this, SIGNAL(showFavoritesToggled(bool)));
@@ -50,7 +53,7 @@ void PlaylistView::dragMoveEvent(QDragMoveEvent *event)
 void PlaylistView::dropEvent(QDropEvent *event)
 {
     QListView::dropEvent(event);
-    
+
     const QMimeData *mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
         MediaDroppedDialog dialog(this);

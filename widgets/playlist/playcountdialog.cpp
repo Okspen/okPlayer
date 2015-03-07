@@ -25,6 +25,5 @@ int PlayCountDialog::playCount() const
 
 void PlayCountDialog::setPlayCount(int count)
 {
-    setResult(1);
     return ui->spinBox->setValue(count);
 }

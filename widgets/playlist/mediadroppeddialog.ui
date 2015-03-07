@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>129</height>
+    <height>130</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,6 +25,9 @@
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -51,7 +54,7 @@
    <item row="3" column="0">
     <widget class="QCheckBox" name="rootCheckBox">
      <property name="text">
-      <string>Just Root files</string>
+      <string>Only Root files</string>
      </property>
     </widget>
    </item>

@@ -187,6 +187,7 @@ bool PlaylistModel::setData(const QModelIndex &index, const QVariant &value, int
     if (role == PlayCountRole) {
         int val = value.toInt();
         m_playlist->setPlayCount(row, val);
+        return true;
     }
 
     if (role == CurrentRole && value.toBool()) {
@@ -243,7 +244,7 @@ void PlaylistModel::updatePlaylist()
 
 void PlaylistModel::onTrackChanged(PlayId id)
 {
-    emit dataChanged(createIndex(id.index(), 0),        createIndex(id.index(), 0),         QVector<int>() << CurrentRole);
+    emit dataChanged(createIndex(id.index(), 0), createIndex(id.index(), 0), QVector<int>() << CurrentRole);
 }
 
 void PlaylistModel::onMediaChanged(const QUrl &url)
@@ -258,9 +259,9 @@ void PlaylistModel::onMediaChanged(const QUrl &url)
 
     int index = -1;
     int lastIndex = 0;
-    for (int i=0; i<urlCount; i++) {
+    for (int i=0; i < urlCount; i++) {
         index = m_playlist->indexOf(url, lastIndex);
-        emit dataChanged(createIndex(index, 0), createIndex(index, 0), QVector<int>() << Qt::DisplayRole);
+        //emit dataChanged(createIndex(index, 0), createIndex(index, 0), QVector<int>() << Qt::DisplayRole);
         lastIndex = index;
     }
 }
