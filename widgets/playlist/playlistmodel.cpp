@@ -261,7 +261,7 @@ void PlaylistModel::onMediaChanged(const QUrl &url)
     int lastIndex = 0;
     for (int i=0; i < urlCount; i++) {
         index = m_playlist->indexOf(url, lastIndex);
-        //emit dataChanged(createIndex(index, 0), createIndex(index, 0), QVector<int>() << Qt::DisplayRole);
+        emit dataChanged(createIndex(index, 0), createIndex(index, 0), QVector<int>() << Qt::DisplayRole);
         lastIndex = index;
     }
 }
