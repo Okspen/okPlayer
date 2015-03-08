@@ -21,16 +21,16 @@ public:
 
 signals:
     void dataChanged(QUrl);
+    void queueReady(QList<MediaInfo*>);
 
 private slots:
     void onProcessed(MediaInfo *item);
-    void onFinished();
     void processQueue();
 
 private:
     QHash<QUrl, MediaInfo*> m_info;
-    QList<MediaInfo*>   m_queue;
-    QTimer              m_timer;
+    QList<MediaInfo*>       m_queue;
+    QTimer                  m_timer;
 
     QThread     *m_readerThread;
     TagReader   *m_reader;

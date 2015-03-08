@@ -4,6 +4,7 @@ PlaylistView::PlaylistView(QWidget *parent) :
     QListView(parent)
 {
     setAcceptDrops(true);
+    setUniformItemSizes(true);
 
     m_emptyMessage          = "Empty playlist";
 

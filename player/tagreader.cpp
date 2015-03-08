@@ -6,9 +6,9 @@ TagReader::TagReader(QObject *parent) :
 {
 }
 
-void TagReader::setList(QList<MediaInfo *> list)
+void TagReader::appendToQueue(QList<MediaInfo *> list)
 {
-    m_queue = list;
+    m_queue.append(list);
 }
 
 void TagReader::readTagsBASS(MediaInfo *info)
@@ -28,16 +28,16 @@ void TagReader::readTagsBASS(MediaInfo *info)
     QString title;
 
     BASS::LocalStream bs(url, this);
-    HSTREAM s = bs.handler();
+    HSTREAM s   = bs.handler();
     int seconds = bs.lengthSeconds();
 
-    artist = TAGS_Read(s, "%UTF8(%ARTI)");
-    album = TAGS_Read(s, "%UTF8(%ALBM)");
-    title = TAGS_Read(s, "%UTF8(%TITL)");
+    artist  = TAGS_Read(s, "%UTF8(%ARTI)");
+    album   = TAGS_Read(s, "%UTF8(%ALBM)");
+    title   = TAGS_Read(s, "%UTF8(%TITL)");
 
-    artist = artist.simplified();
-    album = album.simplified();
-    title = title.simplified();
+    artist  = artist.simplified();
+    album   = album.simplified();
+    title   = title.simplified();
 
     info->setAlbum(album);
     info->setArtist(artist);
@@ -47,16 +47,22 @@ void TagReader::readTagsBASS(MediaInfo *info)
 
 void TagReader::process()
 {
-    m_cancel = false;
+    m_cancel        = false;
     MediaInfo *info = 0;
 
-    for (int i=0; i<m_queue.count() && !m_cancel; ++i) {
-        info = m_queue.at(i);
+    while (!m_queue.isEmpty() && !m_cancel) {
+        info = m_queue.takeFirst();
         readTagsBASS(info);
         emit processed(info);
     }
 
     emit finished();
+}
+
+void TagReader::process(QList<MediaInfo *> list)
+{
+    appendToQueue(list);
+    process();
 }
 
 void TagReader::cancel()

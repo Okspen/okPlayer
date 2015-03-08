@@ -16,17 +16,17 @@ class TagReader : public QObject
     Q_OBJECT
 public:
     explicit TagReader(QObject *parent = 0);
-    void setList(QList<MediaInfo*> list);
+    void appendToQueue(QList<MediaInfo*> list);
 
 public slots:
     void process();
+    void process(QList<MediaInfo*> list);
     void cancel();
 
 private:
     bool                m_cancel;
     QList<MediaInfo*>   m_queue;
 
-    void readTags(MediaInfo *info);
     void readTagsBASS(MediaInfo *info);
 
 signals:

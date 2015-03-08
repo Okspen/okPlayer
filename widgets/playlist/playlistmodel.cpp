@@ -252,18 +252,9 @@ void PlaylistModel::onMediaChanged(const QUrl &url)
     if (m_playlist == 0)
         return;
 
-    int urlCount = m_playlist->count(url);
-
-    if (urlCount < 1)
-        return;
-
-    int index = -1;
-    int lastIndex = 0;
-    for (int i=0; i < urlCount; i++) {
-        index = m_playlist->indexOf(url, lastIndex);
+    int index = m_playlist->indexOf(url);
+    if (index > 0)
         emit dataChanged(createIndex(index, 0), createIndex(index, 0), QVector<int>() << Qt::DisplayRole);
-        lastIndex = index;
-    }
 }
 
 void PlaylistModel::onPlaylistDestroyed()
