@@ -66,7 +66,7 @@ void PlaylistView::dropEvent(QDropEvent *event)
         
         QList<QUrl> urls = mimeData->urls();
         QStringList pathList;
-        for (int i=0; i<urls.count(); i++)
+        for (int i=0; i < urls.count(); i++)
             pathList.append(urls.at(i).toLocalFile());
 
         Player::instance()->folder()->play(pathList, recursive, append);

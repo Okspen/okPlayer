@@ -208,6 +208,7 @@ bool PlaylistModel::removeRows(int row, int count, const QModelIndex &parent)
     m_playlist->removeAt(row, count);
 
     emit endRemoveRows();
+
     return true;
 }
 
