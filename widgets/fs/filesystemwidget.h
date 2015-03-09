@@ -26,6 +26,11 @@ public:
 public slots:
     void setFocusOnFilter();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
+
 private:
     Ui::FileSystemWidget    *ui;
     FileSystemModel         *m_model;

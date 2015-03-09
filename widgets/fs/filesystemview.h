@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QDesktopServices>
+#include <QMimeData>
 #include "filesystemmodel.h"
 #include "player/playersettings.h"
 

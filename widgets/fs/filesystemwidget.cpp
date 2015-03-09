@@ -57,6 +57,44 @@ void FileSystemWidget::setFocusOnFilter()
     ui->filterEdit->setFocus();
 }
 
+void FileSystemWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    int urlCount = event->mimeData()->urls().count();
+    if (urlCount == 0 || urlCount > 1)
+        return;
+
+    event->accept();
+}
+
+void FileSystemWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    int urlCount = event->mimeData()->urls().count();
+    if (urlCount == 0 || urlCount > 1)
+        return;
+
+    event->accept();
+}
+
+void FileSystemWidget::dropEvent(QDropEvent *event)
+{
+    const QMimeData * data = event->mimeData();
+
+    QList<QUrl> urls    = data->urls();
+    int urlCount        = urls.count();
+
+    if (urlCount == 0 || urlCount > 1 )
+        return;
+
+    if (urlCount == 1) {
+        QUrl url = urls.at(0);
+        QFileInfo fileInfo(url.toLocalFile());
+        if (fileInfo.exists() && fileInfo.isDir()) {
+            m_model->cd(fileInfo.filePath());
+            event->accept();
+        }
+    }
+}
+
 void FileSystemWidget::initModel()
 {
     m_model = new FileSystemModel(this);
