@@ -48,7 +48,6 @@ SOURCES += main.cpp \
     player/bass/localstream.cpp \
     player/bass/core.cpp \
     widgets/search/searchwidget.cpp \
-    widgets/playlist/widetrackdelegate.cpp \
     widgets/fs/filesystemwidget.cpp \
     widgets/fs/filesystemitemdelegate.cpp \
     widgets/fs/scanprogressdialog.cpp \
@@ -91,7 +90,6 @@ HEADERS += mainwindow.h \
     player/bass/localstream.h \
     player/bass/core.h \
     widgets/search/searchwidget.h \
-    widgets/playlist/widetrackdelegate.h \
     widgets/fs/filesystemwidget.h \
     widgets/fs/filesystemitemdelegate.h \
     widgets/fs/scanprogressdialog.h \

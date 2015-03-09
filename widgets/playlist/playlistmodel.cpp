@@ -116,11 +116,6 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         return QString("%1. %2 – %3").arg(displayRow).arg(artist).arg(title);
     }
 
-    if (role == Qt::DecorationRole) {
-        if (row == m_cycler->currentIndex())
-            return QPixmap(":/app/images/icons/okplayer.ico");
-    }
-
     if (role == TitleRole)
         return title;
 
