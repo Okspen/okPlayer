@@ -34,10 +34,14 @@ signals:
     
 protected:
     void paintEvent(QPaintEvent *event);
+
     void mouseReleaseEvent(QMouseEvent *event);
+    void keyReleaseEvent(QKeyEvent* event);
+
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
+
     void contextMenuEvent(QContextMenuEvent *event);
 
 private:

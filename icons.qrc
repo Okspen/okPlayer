@@ -23,5 +23,6 @@
     </qresource>
     <qresource prefix="/app">
         <file>images/icons/okplayer.ico</file>
+        <file>images/icons/current.png</file>
     </qresource>
 </RCC>

@@ -33,10 +33,48 @@ void PlaylistView::mouseReleaseEvent(QMouseEvent *event)
     QListView::mouseReleaseEvent(event);
     
     Qt::MouseButton button = event->button();
+
     if (button == Qt::XButton1)
         Player::instance()->history()->prev();
+
     if (button == Qt::XButton2)
         Player::instance()->history()->next();
+}
+
+void PlaylistView::keyReleaseEvent(QKeyEvent *event)
+{
+    QListView::keyReleaseEvent(event);
+
+    QModelIndexList selected = selectedIndexes();
+    int selectedCount = selected.count();
+
+    QAbstractItemModel *m = model();
+    if (m == 0)
+        return;
+
+    switch (event->key()) {
+
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        if (selectedCount == 1)
+            m->setData(selected.at(0), true, PlaylistModel::CurrentRole);
+        break;
+
+    case Qt::Key_Delete:
+        for (int i=0; i < selectedCount; ++i)
+            m->removeRow(selected.at(i).row());
+        break;
+
+    case Qt::Key_S:
+        bool allFavorite = true;
+        for (int i=0; i < selectedCount && allFavorite; ++i) {
+            allFavorite = selected.at(i).data(PlaylistModel::FavoriteRole).toBool();
+        }
+
+        for (int i=0; i < selectedCount; ++i)
+            m->setData(selected.at(i), !allFavorite, PlaylistModel::FavoriteRole);
+        break;
+    }
 }
 
 void PlaylistView::dragEnterEvent(QDragEnterEvent *event)
@@ -80,25 +118,50 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
     QModelIndex index = indexAt(event->pos());
     bool indexIsValid = index.isValid();
 
+    QModelIndexList selected = selectedIndexes();
+    int selectedCount = selected.count();
+
     QUrl url = index.data(PlaylistModel::UrlRole).toUrl();
 
+    /////////////////////////////
+
     QAction playAction("Play", this);
-    playAction.setEnabled(indexIsValid);
+    playAction.setEnabled(selectedCount == 1);
+
+    /////////////////////////////
 
     QAction playSeveralTimes("Play Several Times", this);
-    playSeveralTimes.setEnabled(indexIsValid);
+    playSeveralTimes.setEnabled(indexIsValid && selectedCount > 0);
 
-    bool isFavorite = index.data(PlaylistModel::FavoriteRole).toBool();
-    QString favoritesText = (isFavorite) ? "Remove from Favorites" : "Add to Favorites";
+    /////////////////////////////
+
+    bool allFavorite = true;
+    for (int i=0; i < selectedCount && allFavorite; ++i) {
+        allFavorite = selected.at(i).data(PlaylistModel::FavoriteRole).toBool();
+    }
+
+    QString favoritesText = (allFavorite) ? "Remove from Favorites" : "Add to Favorites";
     QAction favoritesAction(favoritesText, this);
-    favoritesAction.setEnabled(indexIsValid);
+    favoritesAction.setEnabled(selectedCount > 0);
+
+    /////////////////////////////
 
     QAction openFolder("Open Containing Folder", this);
-    QFileInfo fileInfo(url.toLocalFile());
-    openFolder.setEnabled(index.isValid() && fileInfo.exists());
+
+    if (selectedCount == 1) {
+        QUrl url = selected.at(0).data(PlaylistModel::UrlRole).toUrl();
+        QFileInfo fileInfo(url.toLocalFile());
+        openFolder.setEnabled(fileInfo.exists());
+    }else{
+        openFolder.setEnabled(false);
+    }
+
+    /////////////////////////////
 
     QAction removeAction("Remove", this);
-    removeAction.setEnabled(indexIsValid);
+    removeAction.setEnabled(selectedCount > 0);
+
+    /////////////////////////////
 
     QMenu menu;
     menu.addAction(&playAction);
@@ -110,34 +173,48 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(m_showFavoritesAction);
 
     QAction* resultAction = menu.exec(event->globalPos());
-    if (resultAction == &playAction) {
-        model()->setData(index, true, PlaylistModel::CurrentRole);
-        return;
+
+    if (selectedCount == 1) {
+        QModelIndex index = selected.at(0);
+
+        if (resultAction == &playAction) {
+            model()->setData(index, true, PlaylistModel::CurrentRole);
+            return;
+        }
+
+        if (resultAction == &openFolder) {
+            QUrl url = index.data(PlaylistModel::UrlRole).toUrl();
+            QFileInfo fileInfo(url.toLocalFile());
+            QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.absoluteDir().absolutePath()));
+            return;
+        }
     }
 
-    if (resultAction == &playSeveralTimes) {
-        PlayCountDialog d(this);
-        d.setPlayCount(index.data(PlaylistModel::PlayCountRole).toInt());
+    if (selectedCount >= 1) {
 
-        int result = d.exec();
-        if (result > 0)
-            model()->setData(index, d.playCount(), PlaylistModel::PlayCountRole);
-        return;
-    }
+        if (resultAction == &playSeveralTimes) {
+            PlayCountDialog d(this);
+            d.setPlayCount(index.data(PlaylistModel::PlayCountRole).toInt());
 
-    if (resultAction == &favoritesAction) {
-        model()->setData(index, !isFavorite, PlaylistModel::FavoriteRole);
-        return;
-    }
+            int result = d.exec();
+            if (result > 0) {
+                foreach (QModelIndex index, selected)
+                    model()->setData(index, d.playCount(), PlaylistModel::PlayCountRole);
+            }
+            return;
+        }
 
-    if (resultAction == &openFolder) {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.absoluteDir().absolutePath()));
-        return;
-    }
+        if (resultAction == &favoritesAction) {
+            foreach (QModelIndex index, selected)
+                model()->setData(index, !allFavorite, PlaylistModel::FavoriteRole);
+            return;
+        }
 
-    if (resultAction == &removeAction) {
-        model()->removeRows(index.row(), 1);
-        return;
+        if (resultAction == &removeAction) {
+            foreach (QModelIndex index, selected)
+                model()->removeRows(index.row(), 1);
+            return;
+        }
     }
 }
 
