@@ -6,26 +6,15 @@ TrackDelegate::TrackDelegate(QObject *parent) :
     m_margin    = 4;
     m_active    = false;
     m_star      = QIcon(":/tango/images/icons/tango/star_checked.png");
+    m_current   = QPixmap(":/app/images/icons/current.png");
 }
 
 void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     /* Painting background */
 
-    QStyleOptionViewItem localOption = option;
-
-    bool isCurrent = index.data(PlaylistModel::CurrentRole).toBool();
-    if (isCurrent) {
-        localOption.state = localOption.state | QStyle::State_Selected;
-        // to prevent becoming grey
-        if (m_active)
-            localOption.state = localOption.state | QStyle::State_Active;
-    } else if (localOption.state & QStyle::State_Selected) {
-        //localOption.state = localOption.state & (~QStyle::State_Selected);
-    }
-
-    QStyle *style = localOption.widget->style();
-    style->drawControl(QStyle::CE_ItemViewItem, &localOption, painter, localOption.widget);
+    QStyle *style = option.widget->style();
+    style->drawControl(QStyle::CE_ItemViewItem, &option, painter, option.widget);
 
     /* Painting time */
 
@@ -46,9 +35,20 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                         option.rect.height());
     m_star.paint(painter, favoriteRect, Qt::AlignCenter, TrackDelegate::iconMode(index), QIcon::On);
 
+    /* Painting current icon */
+
+    if (index.data(PlaylistModel::CurrentRole).toBool()) {
+        QRect iconRect(option.rect.left() + m_margin,
+                       option.rect.top() + m_margin,
+                       16,
+                       16);
+
+        painter->drawPixmap(iconRect, m_current);
+    }
+
     /* Painting track details */
 
-    QRect textRect(option.rect.left() + m_margin,
+    QRect textRect(option.rect.left() + 2 * m_margin + 16,
                     option.rect.top() + m_margin,
                     option.rect.width() - 4 * m_margin - favoriteRect.width() - timeRect.width(),
                     option.rect.height());

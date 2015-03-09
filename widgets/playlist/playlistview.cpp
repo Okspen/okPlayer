@@ -33,8 +33,10 @@ void PlaylistView::mouseReleaseEvent(QMouseEvent *event)
     QListView::mouseReleaseEvent(event);
     
     Qt::MouseButton button = event->button();
+
     if (button == Qt::XButton1)
         Player::instance()->history()->prev();
+
     if (button == Qt::XButton2)
         Player::instance()->history()->next();
 }
