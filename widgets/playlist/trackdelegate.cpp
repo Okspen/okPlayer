@@ -37,20 +37,20 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     /* Painting current icon */
 
-    if (index.data(PlaylistModel::CurrentRole).toBool()) {
-        QRect iconRect(option.rect.left() + m_margin,
-                       option.rect.top() + m_margin,
-                       16,
-                       16);
+    QRect currentRect(option.rect.left() + m_margin,
+                   option.rect.top() + m_margin,
+                   16,
+                   16);
 
-        painter->drawPixmap(iconRect, m_current);
+    if (index.data(PlaylistModel::CurrentRole).toBool()) {
+        painter->drawPixmap(currentRect, m_current);
     }
 
     /* Painting track details */
 
-    QRect textRect(option.rect.left() + 2 * m_margin + 16,
+    QRect textRect(option.rect.left() + 2 * m_margin + currentRect.width(),
                     option.rect.top() + m_margin,
-                    option.rect.width() - 4 * m_margin - favoriteRect.width() - timeRect.width(),
+                    option.rect.width() - 5 * m_margin - currentRect.width() - favoriteRect.width() - timeRect.width(),
                     option.rect.height());
     QString mainText = index.data(Qt::DisplayRole).toString();
     QString elidedText = option.fontMetrics.elidedText(mainText, Qt::ElideRight, textRect.width());
