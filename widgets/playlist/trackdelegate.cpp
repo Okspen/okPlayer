@@ -21,7 +21,7 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         if (m_active)
             localOption.state = localOption.state | QStyle::State_Active;
     } else if (localOption.state & QStyle::State_Selected) {
-        localOption.state = localOption.state & (~QStyle::State_Selected);
+        //localOption.state = localOption.state & (~QStyle::State_Selected);
     }
 
     QStyle *style = localOption.widget->style();
@@ -83,6 +83,11 @@ QSize TrackDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIn
 
 bool TrackDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+    if (event->type() == QEvent::MouseButtonDblClick) {
+        model->setData(index, true, PlaylistModel::CurrentRole);
+        return true;
+    }
+
     if (event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent *mouseEvent = (QMouseEvent*) event;
         QPoint pos = mouseEvent->pos();
@@ -91,8 +96,7 @@ bool TrackDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const 
             // if user hits the star
             if (pos.x() >= option.rect.right() - option.rect.height() - m_margin)
                 model->setData(index, !index.data(PlaylistModel::FavoriteRole).toBool(), PlaylistModel::FavoriteRole);
-            else
-                model->setData(index, true, PlaylistModel::CurrentRole);
+
             return true;
         }
     }
