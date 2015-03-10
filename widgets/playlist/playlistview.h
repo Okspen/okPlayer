@@ -12,7 +12,6 @@
 
 #include "playlistmodel.h"
 #include "trackdelegate.h"
-#include "widetrackdelegate.h"
 #include "mediadroppeddialog.h"
 #include "player/player.h"
 #include "player/playersettings.h"
