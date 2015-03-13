@@ -21,9 +21,6 @@ public:
     explicit AboutDialog(QWidget *parent = 0);
     ~AboutDialog();
 
-private slots:
-    void sendEmail(const QString &email);
-
 private:
     Ui::aboutDialog *ui;
 };

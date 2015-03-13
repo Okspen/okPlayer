@@ -18,14 +18,13 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     ui->versionLabel->setFont(f2);
     ui->versionLabel->setText(QCoreApplication::applicationVersion());
+
+    ui->logoLabel->setPixmap(QIcon(":/app/images/icons/okplayer.ico").pixmap(64, 64));
+
+    setFixedSize(width(), height());
 }
 
 AboutDialog::~AboutDialog()
 {
     delete ui;
-}
-
-void AboutDialog::sendEmail(const QString &email)
-{
-    QDesktopServices::openUrl(email);
 }
