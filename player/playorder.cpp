@@ -98,6 +98,11 @@ void PlayOrder::next()
     if (m_order.isEmpty())
         return;
 
+    if (m_index == -1) {
+        m_index = 0;
+        return;
+    }
+
     int count = m_playlist->playCount(currentIndex());
     --count;
     if (count == 0) {
