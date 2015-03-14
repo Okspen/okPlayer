@@ -20,7 +20,7 @@ int PlayOrder::currentIndex() const
 
 void PlayOrder::setCurrentIndex(int index)
 {
-    if (m_index >= m_order.count())
+    if (index < 0 || index >= m_order.count() || m_index == index)
         return;
     m_index = m_order.indexOf(index);
 }
@@ -47,6 +47,9 @@ Playlist *PlayOrder::playlist() const
 void PlayOrder::setPlaylist(Playlist *playlist)
 {
     if (m_playlist) {
+        if (m_index != -1)
+            m_lastTracks.insert(m_playlist, currentIndex());
+
         disconnect(m_playlist, SIGNAL(countChanged()),  this, SLOT(onCountChanged()));
         disconnect(m_playlist, SIGNAL(removed(int,int)),this, SLOT(onRemoved(int,int)));
         disconnect(m_playlist, SIGNAL(destroyed()),     this, SLOT(onDestroyed()));
@@ -99,7 +102,8 @@ void PlayOrder::next()
         return;
 
     if (m_index == -1) {
-        m_index = 0;
+        m_index = m_order.indexOf(m_lastTracks.value(m_playlist, 0));
+        next();
         return;
     }
 
@@ -181,8 +185,10 @@ void PlayOrder::onCountChanged()
 
 void PlayOrder::onDestroyed()
 {
+    m_lastTracks.remove(m_playlist);
     m_playlist  = 0;
     m_index     = -1;
+
     syncOrder();
 }
 

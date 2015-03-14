@@ -39,6 +39,7 @@ private:
     int         m_index;
     Playlist    *m_playlist;
     QList<int>  m_order;
+    QMap<Playlist*, int> m_lastTracks;
 
 private slots:
     void onCountChanged();
