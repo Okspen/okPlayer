@@ -69,8 +69,6 @@ void FileSystemView::contextMenuEvent(QContextMenuEvent *event)
     if (triggeredAction == 0)
         return;
 
-    FolderPlayer *folder = Player::instance()->folder();
-
     if (triggeredAction == replaceAllAction || triggeredAction == replaceAction)
         emit play(pathes, true, false);
 
