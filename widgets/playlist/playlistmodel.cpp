@@ -72,9 +72,9 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
     if (index.isValid() == false)
         return QVariant();
 
-    int row = index.row();
-    QUrl url = m_playlist->at(row);
-    int playCount = m_playlist->playCount(row);
+    int row         = index.row();
+    QUrl url        = m_playlist->at(row);
+    int playCount   = m_playlist->playCount(row);
 
     QString title;
     QString artist;
@@ -135,7 +135,8 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == FavoriteRole) {
-        if (!m_favorites) return false;
+        if (!m_favorites)
+            return false;
         return m_favorites ? m_favorites->isFavorite(url) : false;
     }
 
@@ -143,7 +144,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         return url.isLocalFile();
 
     if (role == CurrentRole) {
-        return (row == m_cycler->currentIndex());
+        return (PlayId(m_playlist, row) == m_cycler->current());
     }
 
     if (role == TimeRole) {
@@ -203,11 +204,7 @@ bool PlaylistModel::removeRows(int row, int count, const QModelIndex &parent)
     if (m_playlist->count() <= 0 || row < 0 || row >= rowCount(parent))
         return false;
 
-    emit beginRemoveRows(parent, row, row + count - 1);
-
     m_playlist->removeAt(row, count);
-
-    emit endRemoveRows();
 
     return true;
 }
