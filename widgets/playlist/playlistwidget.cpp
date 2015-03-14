@@ -55,8 +55,13 @@ void PlaylistWidget::setPlaylist(Playlist *playlist)
     if (playlist != 0)
         connect (playlist, SIGNAL(destroyed()), this, SLOT(onPlaylistDestroyed()));
 
-    //m_model->setPlaylist(playlist);
-    ui->listView->scrollToTop();
+    PlayId current = Player::instance()->cycler()->current();
+    if (current.playlist() == playlist)
+        ui->listView->scrollTo(
+            sortIndex(current.index()), QAbstractItemView::PositionAtCenter);
+    else
+        ui->listView->scrollToTop();
+
     ui->filterEdit->clear();
     m_favFilterModel->setEnabled(false);
     ui->listView->setEmptyMessage(chooseEmptyMessage());
