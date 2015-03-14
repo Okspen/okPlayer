@@ -33,6 +33,7 @@ public slots:
     void shuffleTracks();
 
 private:
+    PlayId      m_current;
     Playlist    *m_playlist;
     PlayOrder   m_order;
 

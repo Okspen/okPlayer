@@ -14,12 +14,12 @@ Playlist *TrackCycler::playlist() const
 
 PlayId TrackCycler::current() const
 {
-    return PlayId(m_playlist, m_order.currentIndex());
+    return m_current;
 }
 
 int TrackCycler::currentIndex() const
 {
-    return m_order.currentIndex();
+    return m_current.index();
 }
 
 bool TrackCycler::shuffle() const
@@ -61,6 +61,9 @@ void TrackCycler::setPlaylist(Playlist *playlist)
         return;
 
     m_order.setPlaylist(playlist);
+    if (playlist == m_current.playlist())
+        m_order.setCurrentIndex(m_current.index());
+
     m_playlist = playlist;
 
     emit playlistChanged(playlist);
@@ -72,10 +75,11 @@ void TrackCycler::setTrack(int i, bool notify)
         return;
 
     m_order.setCurrentIndex(i);
+    m_current = PlayId(m_playlist, i);
 
     if (notify) {
         emit trackChanged(m_playlist->at(i));
-        emit trackChanged(PlayId(m_playlist, i));
+        emit trackChanged(m_current);
     }
 }
 
