@@ -91,6 +91,7 @@ qreal Core::position() const
 
 void Core::timerEvent(QTimerEvent *e)
 {
+    Q_UNUSED(e)
     emit positionChanged(positionSeconds(), lengthSeconds());
 }
 

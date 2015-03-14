@@ -24,8 +24,10 @@ public:
     bool isLooped() const;
 
     int volume() const;
+
     qreal position() const;
     double positionSeconds() const;
+
     qint32 length() const;
     double lengthSeconds() const;
 
