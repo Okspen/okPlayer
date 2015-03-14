@@ -47,6 +47,7 @@ private slots:
     void playRoot();
     void addAll();
     void addRoot();
+    void play(const QStringList &pathes, bool recursive, bool append);
     void selectFolder();
     void showScanDialog();
     void onPathChanged();

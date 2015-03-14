@@ -15,10 +15,22 @@ void FileSystemView::keyReleaseEvent(QKeyEvent *event)
 {
     QListView::keyReleaseEvent(event);
 
+    QStringList pathes = selectedPathes();
+
     switch (event->key()) {
     case Qt::Key_Return:
     case Qt::Key_Enter:
-        emit open(currentIndex());
+
+        if (pathes.count() == 1)
+            emit open(currentIndex());
+
+        if (pathes.count() > 1) {
+
+            if (event->modifiers() & Qt::ControlModifier)
+                emit play(pathes, true);
+            else
+                emit play(pathes, true, true);
+        }
         break;
 
     case Qt::Key_Back:
@@ -49,19 +61,10 @@ void FileSystemView::contextMenuEvent(QContextMenuEvent *event)
     if (model() == 0)
         return;
 
-    QModelIndex index = indexAt(event->pos());
-    if (index.isValid() == false)
-        return;
+    QStringList pathes = selectedPathes();
 
-    bool isFile = index.data(FileSystemModel::IsFileRole).toBool();
-    bool isFavorite = index.data(FileSystemModel::FavoriteRole).toBool();
-    if (isFile) {
-        QString favoriteText = (isFavorite) ? "Remove from Favorites" : "Add to Favorites";
-        addToFavorites->setText(favoriteText);
-    }
-    QString path = index.data(FileSystemModel::FilePathRole).toString();
+    QMenu *menu = setupContextMenu();
 
-    QMenu *menu = (isFile) ? fileMenu : dirMenu;
     QAction* triggeredAction = menu->exec(mapToGlobal(event->pos()));
     if (triggeredAction == 0)
         return;
@@ -69,24 +72,30 @@ void FileSystemView::contextMenuEvent(QContextMenuEvent *event)
     FolderPlayer *folder = Player::instance()->folder();
 
     if (triggeredAction == replaceAllAction || triggeredAction == replaceAction)
-        folder->play(path, true, false);
+        emit play(pathes, true, false);
 
-    if(triggeredAction == appendAllAction || triggeredAction == appendAction)
-        folder->play(path, true, true);
+    if (triggeredAction == appendAllAction || triggeredAction == appendAction)
+        emit play(pathes, true, true);
 
-    if(triggeredAction == replaceRootAction)
-        folder->play(path, false, false);
+    if (triggeredAction == replaceRootAction)
+        emit play(pathes, false, false);
 
-    if(triggeredAction == appendRootAction)
-        folder->play(path, false, true);
+    if (triggeredAction == appendRootAction)
+        emit play(pathes, false, true);
 
-    if (triggeredAction == addToFavorites)
+    if (triggeredAction == addToFavorites) {
+        QModelIndex index = indexAt(event->pos());
+        bool isFavorite = index.data(FileSystemModel::FavoriteRole).toBool();
         model()->setData(index, !isFavorite, FileSystemModel::FavoriteRole);
+    }
 
-    if(triggeredAction == openFolderAction) {
-        QString folderPath =
-            index.data(FileSystemModel::AbsolutePathRole).toString();
-        QDesktopServices::openUrl(QUrl::fromLocalFile(folderPath));
+    if (triggeredAction == openFolderAction) {
+        QModelIndex index = currentIndex();
+        if (!index.isValid())
+            return;
+
+        QString path = index.data(FileSystemModel::AbsolutePathRole).toString();
+        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
 }
 
@@ -131,12 +140,18 @@ void FileSystemView::initContextMenus()
     dirMenu->addAction(appendAllAction);
     dirMenu->addAction(appendRootAction);    
     dirMenu->addAction(openFolderAction);
+
+    multiMenu = new QMenu(this);
+    multiMenu->addAction(replaceAction);
+    multiMenu->addAction(appendAction);
+    multiMenu->addAction(openFolderAction);
 }
 
 void FileSystemView::destroyContextMenus()
 {
     delete fileMenu;
     delete dirMenu;
+    delete multiMenu;
 
     delete appendAction;
     delete replaceAction;
@@ -147,4 +162,76 @@ void FileSystemView::destroyContextMenus()
     delete replaceRootAction;
 
     delete openFolderAction;
+}
+
+QMenu * FileSystemView::setupContextMenu()
+{
+    openFolderAction->setEnabled(true);
+
+    QModelIndexList selected = selectedIndexes();
+    int selectedCount = selected.count();
+
+    if (selectedCount == 0) {
+
+        appendAction->setEnabled(false);
+        replaceAction->setEnabled(false);
+
+        appendAllAction->setEnabled(false);
+        appendRootAction->setEnabled(false);
+        replaceAllAction->setEnabled(false);
+        replaceRootAction->setEnabled(false);
+
+        addToFavorites->setEnabled(false);
+        return dirMenu;
+
+    } else if (selectedCount == 1) {
+
+        QModelIndex index = selected.at(0);
+
+        bool isFile = index.data(FileSystemModel::IsFileRole).toBool();
+        bool isFavorite = index.data(FileSystemModel::FavoriteRole).toBool();
+
+        if (isFile) {
+
+            QString favoriteText = (isFavorite) ? "Remove from Favorites" : "Add to Favorites";
+            addToFavorites->setText(favoriteText);
+            addToFavorites->setEnabled(true);
+
+            appendAction->setEnabled(true);
+            replaceAction->setEnabled(true);
+
+            return fileMenu;
+
+        } else {
+
+            addToFavorites->setEnabled(false);
+
+            appendAllAction->setEnabled(true);
+            appendRootAction->setEnabled(true);
+            replaceAllAction->setEnabled(true);
+            replaceRootAction->setEnabled(true);
+
+            return dirMenu;
+        }
+
+    } else if (selectedCount > 1) {
+
+        appendAction->setEnabled(true);
+        replaceAction->setEnabled(true);
+
+        return multiMenu;
+    }
+
+    return dirMenu;
+}
+
+QStringList FileSystemView::selectedPathes() const
+{
+    QModelIndexList selected = selectedIndexes();
+    QStringList pathes;
+
+    for (int i=0; i < selected.count(); ++i)
+        pathes << selected.at(i).data(FileSystemModel::FilePathRole).toString();
+
+    return pathes;
 }

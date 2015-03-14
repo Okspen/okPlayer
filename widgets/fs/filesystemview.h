@@ -17,8 +17,11 @@ public:
     explicit FileSystemView(QWidget *parent = 0);
     ~FileSystemView();
 
+    QStringList selectedPathes() const;
+
 signals:
     void open(QModelIndex);
+    void play(QStringList pathes, bool recursive = false, bool append = false);
     void up();
 
 protected:
@@ -40,9 +43,12 @@ private:
 
     QMenu *fileMenu;
     QMenu *dirMenu;
+    QMenu *multiMenu;
 
     void initContextMenus();
     void destroyContextMenus();
+
+    QMenu * setupContextMenu();
 };
 
 #endif // FSVIEW_H

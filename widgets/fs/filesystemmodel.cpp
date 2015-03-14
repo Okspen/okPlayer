@@ -74,6 +74,9 @@ bool FileSystemModel::setData(const QModelIndex &index, const QVariant &value, i
         if (!m_favorites)
             return false;
 
+        if (!index.data(FileSystemModel::IsFileRole).toBool())
+            return false;
+
         bool isFavorite = value.toBool();
         QUrl url = QUrl::fromLocalFile(index.data(FileSystemModel::FilePathRole).toString());
 

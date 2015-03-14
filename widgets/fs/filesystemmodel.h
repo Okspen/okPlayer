@@ -29,9 +29,10 @@ public:
 
     QDir        dir() const;
     QFileInfo   fileInfo(const QModelIndex &index) const;
-    void setNameFilters(const QStringList &nameFilters);
     QString currentPath() const;
     QString previousDirName() const;
+
+    void setNameFilters(const QStringList &nameFilters);
 
 signals:
     void pathChanged();

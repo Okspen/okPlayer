@@ -45,6 +45,12 @@
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="selectionRectVisible">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="0" column="0">
@@ -152,6 +158,9 @@
       </property>
       <item>
        <widget class="QPushButton" name="playAllButton">
+        <property name="toolTip">
+         <string>Play All of Current Folder</string>
+        </property>
         <property name="text">
          <string>Play All</string>
         </property>
@@ -159,6 +168,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="playRootButton">
+        <property name="toolTip">
+         <string>Play Root of Current Folder</string>
+        </property>
         <property name="text">
          <string>Play Root</string>
         </property>
@@ -166,6 +178,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="addAllButton">
+        <property name="toolTip">
+         <string>Add All of Current Folder</string>
+        </property>
         <property name="text">
          <string>Add All</string>
         </property>
@@ -173,6 +188,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="addRootButton">
+        <property name="toolTip">
+         <string>Add Root of Current Folder</string>
+        </property>
         <property name="text">
          <string>Add Root</string>
         </property>

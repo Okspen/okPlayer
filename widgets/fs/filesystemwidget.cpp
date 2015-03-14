@@ -11,6 +11,11 @@ FileSystemWidget::FileSystemWidget(QWidget *parent) :
     ui->listView->setItemDelegate(m_delegate);
 
     initModel();
+    ui->listView->setModel(m_sortModel);
+    connect(ui->listView, SIGNAL(open(QModelIndex)),m_model, SLOT(cd(QModelIndex)));
+    connect(ui->listView, SIGNAL(up()),             m_model, SLOT(cdUp()));
+    connect(ui->listView, SIGNAL(play(QStringList,bool,bool)), this, SLOT(play(QStringList,bool,bool)));
+
     initSearch();
 
     ui->progressPanel->hide();
@@ -105,10 +110,6 @@ void FileSystemWidget::initModel()
     m_sortModel->setSourceModel(m_model);
     m_sortModel->setDynamicSortFilter(true);
     m_sortModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-    ui->listView->setModel(m_sortModel);
-    connect(ui->listView, SIGNAL(open(QModelIndex)),m_model, SLOT(cd(QModelIndex)));
-    connect(ui->listView, SIGNAL(up()),             m_model, SLOT(cdUp()));
 }
 
 void FileSystemWidget::initSearch()
@@ -121,25 +122,31 @@ void FileSystemWidget::initSearch()
 void FileSystemWidget::playAll()
 {
     Player::instance()->folder()->play(m_model->currentPath(), true);
-    m_scanDialogTimer.start(300);
+    m_scanDialogTimer.start(200);
 }
 
 void FileSystemWidget::playRoot()
 {
     Player::instance()->folder()->play(m_model->currentPath(), false);
-    m_scanDialogTimer.start(300);
+    m_scanDialogTimer.start(200);
 }
 
 void FileSystemWidget::addAll()
 {
     Player::instance()->folder()->play(m_model->currentPath(), true, true);
-    m_scanDialogTimer.start(300);
+    m_scanDialogTimer.start(200);
 }
 
 void FileSystemWidget::addRoot()
 {
     Player::instance()->folder()->play(m_model->currentPath(), false, true);
-    m_scanDialogTimer.start(300);
+    m_scanDialogTimer.start(200);
+}
+
+void FileSystemWidget::play(const QStringList &pathes, bool recursive, bool append)
+{
+    Player::instance()->folder()->play(pathes, recursive, append);
+    m_scanDialogTimer.start(200);
 }
 
 void FileSystemWidget::selectFolder()
