@@ -61,17 +61,17 @@ void PlaylistView::keyReleaseEvent(QKeyEvent *event)
         break;
 
     case Qt::Key_Delete:
-        for (int i=0; i < selectedCount; ++i)
-            m->removeRow(selected.at(i).row());
+        for (int i = selectedCount-1; i >= 0; --i)
+            m->removeRows(selected.at(i).row(), 1);
         break;
 
     case Qt::Key_S:
         bool allFavorite = true;
-        for (int i=0; i < selectedCount && allFavorite; ++i) {
+        for (int i = 0; i < selectedCount && allFavorite; ++i) {
             allFavorite = selected.at(i).data(PlaylistModel::FavoriteRole).toBool();
         }
 
-        for (int i=0; i < selectedCount; ++i)
+        for (int i = 0; i < selectedCount; ++i)
             m->setData(selected.at(i), !allFavorite, PlaylistModel::FavoriteRole);
         break;
     }
@@ -211,8 +211,8 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
         }
 
         if (resultAction == &removeAction) {
-            foreach (QModelIndex index, selected)
-                model()->removeRows(index.row(), 1);
+            for (int i = selectedCount-1; i >= 0; --i)
+                model()->removeRows(selected.at(i).row(), 1);
             return;
         }
     }
