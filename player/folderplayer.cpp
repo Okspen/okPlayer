@@ -7,7 +7,7 @@ FolderPlayer::FolderPlayer(QObject *parent) :
 {
     m_toAppend = false;
 
-    connect(&m_folderScanner, SIGNAL(scanFinished()),   this, SIGNAL(finished()));
+    connect(&m_folderScanner, SIGNAL(scanFinished(int)),this, SIGNAL(finished(int)));
     connect(&m_folderScanner, SIGNAL(scanCancelled()),  this, SIGNAL(cancelled()));
 
     connect(&m_folderScanner, SIGNAL(scanPathChanged(QString)),     this, SIGNAL(scanPathChanged(QString)));
@@ -38,11 +38,10 @@ void FolderPlayer::play(const QStringList &folderList, bool recursive, bool appe
 void FolderPlayer::onFileListReady(const QList<QUrl> &fileList)
 {
     PlaylistHistory *history = Player::instance()->history();
-    if (m_toAppend) {
+    if (m_toAppend)
         history->addToCurrent(fileList);
-    } else {
+    else
         history->replaceCurrent(new Playlist(fileList));
-    }
 }
 
 void FolderPlayer::cancel()

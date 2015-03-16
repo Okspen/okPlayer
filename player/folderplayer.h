@@ -15,7 +15,7 @@ public:
 
 signals:
     void scanPathChanged(QString);
-    void finished();
+    void finished(int);
     void cancelled();
     
 private slots:

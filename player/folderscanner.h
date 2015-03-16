@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <QTime>
 #include "playlist.h"
 
 /*
@@ -19,12 +20,13 @@ public:
     explicit FolderScanner(QObject *parent = 0);
     void run();
     void setNameFilters(const QStringList& nameFilters);
+    int lastScanDuration() const;
 
 signals:
     /* Emitted when playlist request completed */
     void fileListReady(QList<QUrl>);
     void scanPathChanged(QString);
-    void scanFinished();
+    void scanFinished(int);
     void scanCancelled();
 
 public slots:
@@ -38,6 +40,7 @@ private slots:
     void processFound();
 
 private:
+    int         m_lastScanDuration;
     QStringList m_pathList;
     bool        m_recursive;
     bool        m_stop;

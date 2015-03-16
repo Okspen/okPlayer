@@ -35,11 +35,11 @@ FileSystemWidget::FileSystemWidget(QWidget *parent) :
     connect(m_scanDialog,                   SIGNAL(cancelled()),                Player::instance()->folder(), SLOT(cancel()));
     connect(Player::instance()->folder(),   SIGNAL(cancelled()),                m_scanDialog,       SLOT(onScanCancelled()));
     connect(Player::instance()->folder(),   SIGNAL(scanPathChanged(QString)),   m_scanDialog,       SLOT(setScanPath(QString)));
-    connect(Player::instance()->folder(),   SIGNAL(finished()),                 m_scanDialog,       SLOT(onScanFinished()));
+    connect(Player::instance()->folder(),   SIGNAL(finished(int)),              m_scanDialog,       SLOT(onScanFinished(int)));
 
     m_scanDialogTimer.setSingleShot(true);
     connect(&m_scanDialogTimer,             SIGNAL(timeout()),                  this,               SLOT(showScanDialog()));
-    connect(Player::instance()->folder(),   SIGNAL(finished()),                 &m_scanDialogTimer, SLOT(stop()));
+    connect(Player::instance()->folder(),   SIGNAL(finished(int)),              &m_scanDialogTimer, SLOT(stop()));
 }
 
 void FileSystemWidget::cd(const QString &path)

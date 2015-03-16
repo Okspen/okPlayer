@@ -20,7 +20,7 @@ signals:
 
 public slots:
     void setScanPath(const QString &path);
-    void onScanFinished();
+    void onScanFinished(int duration);
     void onScanCancelled();
 
 private slots:
@@ -29,7 +29,7 @@ private slots:
 
 private:
     Ui::ScanProgressDialog *ui;
-    QTimer m_closetTimer;
+    QTimer m_closeTimer;
     QTimer m_updateTimer;
     QString m_scanPath;
 };

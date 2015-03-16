@@ -9,8 +9,8 @@ ScanProgressDialog::ScanProgressDialog(QWidget *parent) :
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint & ~Qt::WindowCloseButtonHint);
 
-    m_closetTimer.setSingleShot(true);
-    connect(&m_closetTimer, SIGNAL(timeout()), this, SLOT(close()));
+    m_closeTimer.setSingleShot(true);
+    connect(&m_closeTimer, SIGNAL(timeout()), this, SLOT(close()));
 
     m_updateTimer.setInterval(200);
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(updateScanPath()));
@@ -18,6 +18,8 @@ ScanProgressDialog::ScanProgressDialog(QWidget *parent) :
 
     connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(disableCancelButton()));
     connect(ui->cancelButton, SIGNAL(clicked()), this, SIGNAL(cancelled()));
+
+    setFixedSize(width(), height());
 }
 
 ScanProgressDialog::~ScanProgressDialog()
@@ -30,11 +32,11 @@ void ScanProgressDialog::setScanPath(const QString &path)
     m_scanPath = path;
 }
 
-void ScanProgressDialog::onScanFinished()
+void ScanProgressDialog::onScanFinished(int duration)
 {
     m_scanPath.clear();
-    ui->label->setText("Done");
-    m_closetTimer.start(1000);
+    ui->label->setText(QString("Done in %1 seconds.").arg(duration/1000., 0 , 'f', 2));
+    m_closeTimer.start(1500);
 }
 
 void ScanProgressDialog::onScanCancelled()
@@ -42,7 +44,7 @@ void ScanProgressDialog::onScanCancelled()
     m_scanPath.clear();
     ui->label->setText("Cancelled");
     ui->cancelButton->setEnabled(true);
-    m_closetTimer.start(1000);
+    m_closeTimer.start(1500);
 }
 
 void ScanProgressDialog::disableCancelButton()
