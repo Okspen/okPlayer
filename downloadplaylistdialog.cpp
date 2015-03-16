@@ -28,14 +28,14 @@ DownloadPlaylistDialog::DownloadPlaylistDialog(Playlist *playlist, QWidget *pare
 
     resetUi();
 
-    if (m_playlist ==0 || m_playlist->isEmpty()) {
+    if (m_playlist == 0 || m_playlist->isEmpty())
         ui->startButton->setEnabled(false);
-    }
-    else {
+    else
         setPlaylistText();
-    }
 
     connect(m_playlist, SIGNAL(countChanged()), this, SLOT(setPlaylistText()));
+
+    setFixedSize(width(), height());
 }
 
 DownloadPlaylistDialog::~DownloadPlaylistDialog()
@@ -54,6 +54,9 @@ void DownloadPlaylistDialog::resetUi()
 
     ui->startButton->setEnabled(true);
     ui->stopButton->setEnabled(false);
+
+    ui->startButton->show();
+    ui->stopButton->hide();
 }
 
 void DownloadPlaylistDialog::freezeUi()
@@ -64,6 +67,9 @@ void DownloadPlaylistDialog::freezeUi()
 
     ui->startButton->setEnabled(false);
     ui->stopButton->setEnabled(true);
+
+    ui->startButton->hide();
+    ui->stopButton->show();
 }
 
 bool DownloadPlaylistDialog::checkDestination(const QString &location)
