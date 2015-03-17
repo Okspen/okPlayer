@@ -20,6 +20,8 @@ public:
     bool toAppend() const;
     bool toNew() const;
     bool root() const;
+
+    void setFileFolderCount(int fileCount, int folderCount);
     
 private:
     Ui::MediaDroppedDialog *ui;

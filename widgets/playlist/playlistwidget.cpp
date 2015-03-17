@@ -9,6 +9,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
 
     m_delegate = new TrackDelegate(this);
     ui->listView->setItemDelegate(m_delegate);
+    ui->listView->setAcceptDrops(true);
 
     m_model = new PlaylistModel(this);
     m_model->setTrackCycler(Player::instance()->cycler());

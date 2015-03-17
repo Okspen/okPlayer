@@ -95,17 +95,27 @@ void PlaylistView::dropEvent(QDropEvent *event)
 
     const QMimeData *mimeData = event->mimeData();
     if (mimeData->hasUrls()) {
+
+        QList<QUrl> urls = mimeData->urls();
+        int dirCount = 0;
+        int fileCount = 0;
+
+        for (int i=0; i < urls.count(); ++i)
+            (QFileInfo(urls.at(i).toLocalFile()).isDir()) ? dirCount++ : fileCount++;
+
         MediaDroppedDialog dialog(this);
+        dialog.setFileFolderCount(fileCount, dirCount);
+
         if (!dialog.exec())
             return;
 
         bool append     = dialog.toAppend();
         bool recursive  = !dialog.root();
         
-        QList<QUrl> urls = mimeData->urls();
         QStringList pathList;
-        for (int i=0; i < urls.count(); i++)
+        for (int i=0; i < urls.count(); i++) {
             pathList.append(urls.at(i).toLocalFile());
+        }
 
         Player::instance()->folder()->play(pathList, recursive, append);
     }
