@@ -22,7 +22,8 @@
         <file>images/icons/gnome-icon-theme/close.png</file>
     </qresource>
     <qresource prefix="/app">
-        <file>images/icons/okplayer.ico</file>
         <file>images/icons/current.png</file>
+        <file>images/icons/okplayer.ico</file>
+        <file>images/icons/okplayer_64.png</file>
     </qresource>
 </RCC>

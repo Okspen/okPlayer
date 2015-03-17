@@ -19,7 +19,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->versionLabel->setFont(f2);
     ui->versionLabel->setText(QCoreApplication::applicationVersion());
 
-    ui->logoLabel->setPixmap(QIcon(":/app/images/icons/okplayer.ico").pixmap(64, 64));
+    ui->logoLabel->setPixmap(QPixmap(":/app/images/icons/okplayer_64.png"));
 
     setFixedSize(width(), height());
 }
