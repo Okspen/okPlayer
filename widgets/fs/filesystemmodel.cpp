@@ -109,19 +109,23 @@ QDir FileSystemModel::dir() const
 
 void FileSystemModel::cd(const QString &path)
 {
-    if (m_dir.cd(path)) {
-
-        emit beginResetModel();
-
-        m_fileInfoList.clear();
-        m_fileInfoList.append(m_dir.entryInfoList());
-        updateIconCache();
-
-        emit endResetModel();
-
-        emit pathChanged();
-        emit upChanged(QDir(m_dir).cdUp());
+    QString newPath = path;
+    while (m_dir.cd(newPath)
+           && m_dir.entryList().count() == 1
+           && m_dir.entryInfoList().at(0).isDir()) {
+        newPath = m_dir.entryInfoList().at(0).absoluteFilePath();
     }
+
+    emit beginResetModel();
+
+    m_fileInfoList.clear();
+    m_fileInfoList.append(m_dir.entryInfoList());
+    updateIconCache();
+
+    emit endResetModel();
+
+    emit pathChanged();
+    emit upChanged(QDir(m_dir).cdUp());
 }
 
 void FileSystemModel::cd(const QModelIndex &index)
@@ -134,11 +138,14 @@ void FileSystemModel::cdUp()
     emit beginResetModel();
 
     QString prev = m_dir.dirName();
-    if (m_dir.cdUp()) {
-        m_prevDirName = prev;
-        m_fileInfoList = m_dir.entryInfoList();
-        updateIconCache();
-    }
+    while (m_dir.cdUp()
+           && m_dir.entryList().count() == 1
+           && m_dir.entryInfoList().at(0).isDir())
+    {}
+
+    m_prevDirName   = prev;
+    m_fileInfoList  = m_dir.entryInfoList();
+    updateIconCache();
 
     emit endResetModel();
 
