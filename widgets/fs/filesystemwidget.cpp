@@ -93,10 +93,15 @@ void FileSystemWidget::dropEvent(QDropEvent *event)
     if (urlCount == 1) {
         QUrl url = urls.at(0);
         QFileInfo fileInfo(url.toLocalFile());
-        if (fileInfo.exists() && fileInfo.isDir()) {
+        if (!fileInfo.exists())
+            return;
+
+        if (fileInfo.isDir())
             m_model->cd(fileInfo.filePath());
-            event->accept();
-        }
+        else
+            m_model->cd(fileInfo.absolutePath());
+
+        event->accept();
     }
 }
 
