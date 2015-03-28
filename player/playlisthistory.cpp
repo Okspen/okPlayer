@@ -102,12 +102,14 @@ void PlaylistHistory::replaceCurrent(Playlist *playlist)
     }
 
     if (inRange(m_currentIndex) && m_playlists->at(m_currentIndex)->isEmpty()) {
-        m_playlists->at(m_currentIndex)->append(playlist->urls());
-        m_playlists->at(m_currentIndex)->setName(QString("Playlist %1").arg(m_playlistId++));
+        Playlist *currentPlaylist = m_playlists->at(m_currentIndex);
+        currentPlaylist->append(playlist->urls());
+
         delete playlist;
     } else {
         m_playlists->append(playlist);
-        playlist->setName(QString("Playlist %1").arg(m_playlistId++));
+        if (playlist->name().isEmpty())
+            playlist->setName(QString("Playlist %1").arg(m_playlistId++));
         m_currentIndex = m_playlists->count()-1;
     }
 

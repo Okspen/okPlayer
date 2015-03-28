@@ -21,9 +21,9 @@ HistoryWidget::HistoryWidget(QWidget *parent) :
 
     connect(m_history,  SIGNAL(countChanged()), this, SLOT(onCountChanged()));
 
-    connect(ui->prevButton,     SIGNAL(clicked()), m_history, SLOT(prev()));
-    connect(ui->nextButton,     SIGNAL(clicked()), m_history, SLOT(next()));
-    connect(ui->deleteButton,   SIGNAL(clicked()), m_history, SLOT(deleteCurrentPlaylist()));
+    connect(ui->prevButton,     SIGNAL(clicked()), m_history,   SLOT(prev()));
+    connect(ui->nextButton,     SIGNAL(clicked()), m_history,   SLOT(next()));
+    connect(ui->deleteButton,   SIGNAL(clicked()), this,        SLOT(onPlaylistDeletion()));
 }
 
 HistoryWidget::~HistoryWidget()
@@ -55,4 +55,22 @@ void HistoryWidget::onCurrentIndexChanged(int index)
 {
     if (index == -1)
         ui->playlistCombo->setCurrentIndex(m_history->currentIndex());
+}
+
+void HistoryWidget::onPlaylistDeletion()
+{
+    Playlist *currentPlaylist = m_history->current();
+    QString name    = currentPlaylist->name();
+    int     count   = currentPlaylist->count();
+    QString playlistString
+        = QString("%1 (%2 tracks)").arg(name).arg(count);
+
+    QString message
+        = QString("Are you sure you want to delete %1?").arg(playlistString);
+
+    QMessageBox::StandardButton button
+        = QMessageBox::question(this, "Delete Playlist", message);
+
+    if (button == QMessageBox::Yes)
+        m_history->deleteCurrentPlaylist();
 }

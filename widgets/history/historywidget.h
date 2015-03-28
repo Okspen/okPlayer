@@ -2,6 +2,7 @@
 #define HISTORYWIDGET_H
 
 #include <QWidget>
+#include <QMessageBox>
 #include "player/player.h"
 #include "historymodel.h"
 
@@ -30,6 +31,7 @@ private slots:
     void onPlaylistChanged(Playlist *playlist);
     void onCountChanged();
     void onCurrentIndexChanged(int index);
+    void onPlaylistDeletion();
 };
 
 #endif // HISTORYWIDGET_H
