@@ -28,7 +28,7 @@ protected:
     bool    m_active;
     int     m_margin;
     QIcon   m_star;
-    QPixmap m_current;
+    QIcon   m_current;
 
     static QIcon::Mode iconMode(const QModelIndex &index);
 };

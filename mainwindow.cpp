@@ -145,7 +145,7 @@ void MainWindow::initCyclerUI()
     TrackCycler *cycler = m_player->cycler();
     if (cycler == 0) return;
 
-    connect(cycler,             SIGNAL(trackChanged(PlayId)),   this,               SLOT(setTitle(PlayId)));
+    connect(cycler,             SIGNAL(trackChanged(PlayId,PlayId)),    this,       SLOT(setTitle(PlayId,PlayId)));
 
     connect(ui->buttonPrev,     SIGNAL(clicked()),              cycler,             SLOT(prev()));
     connect(ui->buttonNext,     SIGNAL(clicked()),              cycler,             SLOT(next()));
@@ -358,15 +358,15 @@ void MainWindow::copyPlaylist()
     downloadDialog->show();
 }
 
-void MainWindow::setTitle(PlayId id)
+void MainWindow::setTitle(PlayId prevId, PlayId curId)
 {
     MediaLibrary *media = Player::instance()->media();
     if (media == 0) {
-        setWindowTitle(id.url().fileName());
+        setWindowTitle(curId.url().fileName());
         return;
     }
 
-    MediaInfo *info = Player::instance()->media()->info(id.url());
+    MediaInfo *info = Player::instance()->media()->info(curId.url());
 
     QString artist = info->artist();
     QString title = info->title();

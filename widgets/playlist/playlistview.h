@@ -30,6 +30,7 @@ public slots:
 
 signals:
     void showFavoritesToggled(bool);
+    void scrollToCurrentToggled();
     
 protected:
     void paintEvent(QPaintEvent *event);

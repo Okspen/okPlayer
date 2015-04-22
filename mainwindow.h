@@ -65,7 +65,7 @@ private slots:
     void showAboutDialog();
     void loadFavorites();
     void copyPlaylist();
-    void setTitle(PlayId id);
+    void setTitle(PlayId prevId, PlayId curId);
 
     void disableCopyPlaylist();
     void enableCopyPlaylist();

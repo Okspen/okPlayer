@@ -26,6 +26,8 @@ public slots:
 private:
     Ui::PlaylistWidget *ui;
 
+    TrackCycler             *m_cycler;
+
     TrackDelegate           *m_delegate;
     PlaylistModel           *m_model;
     QSortFilterProxyModel   *m_sortModel;
@@ -36,9 +38,11 @@ private:
     QString chooseEmptyMessage() const;
 
 private slots:
-    void onTrackChanged(PlayId id);
+    void onTrackChanged(PlayId prevId, PlayId curId);
     void onPlaylistCountChanged();
     void onPlaylistDestroyed();
+
+    void scrollToCurrent();
 };
 
 #endif // PLAYLISTWIDGET_H

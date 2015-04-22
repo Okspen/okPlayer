@@ -20,6 +20,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     m_favFilterModel->setSourceModel(m_model);
     m_favFilterModel->setDynamicSortFilter(true);
     connect(ui->listView,       SIGNAL(showFavoritesToggled(bool)), this,           SLOT(setFavoritesFilterEnabled(bool)));
+    connect(ui->listView,       SIGNAL(scrollToCurrentToggled()),   this,           SLOT(scrollToCurrent()));
     connect(m_favFilterModel,   SIGNAL(enabledChanged(bool)),       ui->listView,   SLOT(toggleFavorites(bool)));
 
     m_sortModel = new QSortFilterProxyModel(this);
@@ -35,7 +36,10 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
 
     TrackCycler * cycler = Player::instance()->cycler();
     if (cycler != 0) {
-        connect(cycler, SIGNAL(trackChanged(PlayId)), this, SLOT(onTrackChanged(PlayId)));
+        m_cycler = cycler;
+        connect(cycler, SIGNAL(trackChanged(PlayId,PlayId)), this, SLOT(onTrackChanged(PlayId,PlayId)));
+    } else {
+        m_cycler = 0;
     }
 
     PlaylistHistory *history = Player::instance()->history();
@@ -112,10 +116,10 @@ QString PlaylistWidget::chooseEmptyMessage() const
     return "Empty Playlist";
 }
 
-void PlaylistWidget::onTrackChanged(PlayId id)
+void PlaylistWidget::onTrackChanged(PlayId prevId, PlayId curId)
 {
-    if (m_model->playlist() == id.playlist())
-        ui->listView->scrollTo(sortIndex(id.index()), QAbstractItemView::EnsureVisible);
+    if (m_model->playlist() == curId.playlist())
+        ui->listView->scrollTo(sortIndex(curId.index()), QAbstractItemView::EnsureVisible);
 }
 
 void PlaylistWidget::onPlaylistCountChanged()
@@ -126,4 +130,10 @@ void PlaylistWidget::onPlaylistCountChanged()
 void PlaylistWidget::onPlaylistDestroyed()
 {
     ui->listView->setFavoritesEnabled(false);
+}
+
+void PlaylistWidget::scrollToCurrent()
+{
+    if (m_cycler)
+        ui->listView->scrollTo(sortIndex(m_cycler->currentIndex()), QAbstractItemView::PositionAtCenter);
 }

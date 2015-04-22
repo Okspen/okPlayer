@@ -20,7 +20,7 @@ public:
 signals:
     void shuffleChanged(bool);
     void trackChanged(QUrl);
-    void trackChanged(PlayId);
+    void trackChanged(PlayId, PlayId);
     void playlistChanged(Playlist *playlist);
     
 public slots:

@@ -20,7 +20,9 @@ public:
         TimeRole        = Qt::UserRole + 8,
         DurationRole    = Qt::UserRole + 9,
         PlayCountRole   = Qt::UserRole + 10,
-        SearchRole      = Qt::UserRole + 11
+        SearchRole      = Qt::UserRole + 11,
+        RowRole         = Qt::UserRole + 12,
+        RowCountRole    = Qt::UserRole + 13
     };
 
     explicit PlaylistModel(QObject *parent = 0);
@@ -30,7 +32,7 @@ public:
     void setMediaLibrary(MediaLibrary *media);
     void setFavoritesManager(FavoritesManager *favorites);
 
-    int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent=QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
 
@@ -53,7 +55,7 @@ private:
     QVariant dataNoMedia(const QModelIndex &index, int role) const;
 
 private slots:
-    void onTrackChanged(PlayId id);
+    void onTrackChanged(PlayId prevId, PlayId curId);
     void onMediaChanged(const QUrl &url);
     void onPlaylistDestroyed();
 };

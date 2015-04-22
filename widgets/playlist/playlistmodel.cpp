@@ -23,7 +23,7 @@ void PlaylistModel::setTrackCycler(TrackCycler *cycler)
 
     if (cycler != 0) {
         m_cycler = cycler;
-        connect(m_cycler, SIGNAL(trackChanged(PlayId)),         this, SLOT(onTrackChanged(PlayId)));
+        connect(m_cycler, SIGNAL(trackChanged(PlayId,PlayId)),  this, SLOT(onTrackChanged(PlayId,PlayId)));
         connect(m_cycler, SIGNAL(playlistChanged(Playlist*)),   this, SLOT(setPlaylist(Playlist*)));
     }
 }
@@ -102,9 +102,8 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DisplayRole) {
-        int displayRow = row + 1;
         if (m_media == 0 || (artist.isEmpty() && title.isEmpty()))
-            return QString("%1. %2").arg(displayRow).arg(url.fileName());
+            return url.fileName();
 
         if (title.isEmpty())
             title = "Unknown Title";
@@ -113,7 +112,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         if (album.isEmpty())
             album = "Unknown Album";
 
-        return QString("%1. %2 – %3").arg(displayRow).arg(artist).arg(title);
+        return QString("%1 – %2").arg(artist).arg(title);
     }
 
     if (role == TitleRole)
@@ -145,6 +144,14 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 
     if (role == CurrentRole) {
         return (PlayId(m_playlist, row) == m_cycler->current());
+    }
+
+    if (role == RowRole) {
+        return index.row();
+    }
+
+    if (role == RowCountRole) {
+        return rowCount();
     }
 
     if (role == TimeRole) {
@@ -240,9 +247,10 @@ void PlaylistModel::updatePlaylist()
     emit endResetModel();
 }
 
-void PlaylistModel::onTrackChanged(PlayId id)
+void PlaylistModel::onTrackChanged(PlayId prevId, PlayId curId)
 {
-    emit dataChanged(createIndex(id.index(), 0), createIndex(id.index(), 0), QVector<int>() << CurrentRole);
+    emit dataChanged(createIndex(prevId.index(), 0),    createIndex(prevId.index(), 0), QVector<int>() << CurrentRole);
+    emit dataChanged(createIndex(curId.index(), 0),     createIndex(curId.index(), 0),  QVector<int>() << CurrentRole);
 }
 
 void PlaylistModel::onMediaChanged(const QUrl &url)

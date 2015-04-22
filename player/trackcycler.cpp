@@ -75,11 +75,12 @@ void TrackCycler::setTrack(int i, bool notify)
         return;
 
     m_order.setCurrentIndex(i);
+    PlayId prev = m_current;
     m_current = PlayId(m_playlist, i);
 
     if (notify) {
         emit trackChanged(m_playlist->at(i));
-        emit trackChanged(m_current);
+        emit trackChanged(prev, m_current);
     }
 }
 

@@ -6,7 +6,7 @@ TrackDelegate::TrackDelegate(QObject *parent) :
     m_margin    = 4;
     m_active    = false;
     m_star      = QIcon(":/tango/images/icons/tango/star_checked.png");
-    m_current   = QPixmap(":/app/images/icons/current.png");
+    m_current   = QIcon(":/app/images/icons/current.png");
 }
 
 void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -37,13 +37,19 @@ void TrackDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     /* Painting current icon */
 
+    int row         = index.data(PlaylistModel::RowRole).toInt() + 1;
+    int rowCount    = index.data(PlaylistModel::RowCountRole).toInt();
+    int width       = option.fontMetrics.width(QString::number(rowCount)) + 4;
+
     QRect currentRect(option.rect.left() + m_margin,
-                   option.rect.top() + m_margin,
-                   16,
-                   16);
+                   option.rect.top(),
+                   width,
+                   option.rect.height());
 
     if (index.data(PlaylistModel::CurrentRole).toBool()) {
-        painter->drawPixmap(currentRect, m_current);
+        m_current.paint(painter, currentRect, Qt::AlignCenter, QIcon::Normal, QIcon::On);
+    } else {
+        painter->drawText(currentRect, Qt::AlignCenter, QString::number(row));
     }
 
     /* Painting track details */

@@ -173,6 +173,8 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
 
     /////////////////////////////
 
+    QAction scrollToCurrent("Go to Current", this);
+
     QMenu menu;
     menu.addAction(&playAction);
     menu.addAction(&playSeveralTimes);
@@ -180,6 +182,7 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(&openFolder);
     menu.addAction(&removeAction);
     menu.addSeparator();
+    menu.addAction(&scrollToCurrent);
     menu.addAction(m_showFavoritesAction);
 
     QAction* resultAction = menu.exec(event->globalPos());
@@ -225,6 +228,10 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
                 model()->removeRows(selected.at(i).row(), 1);
             return;
         }
+    }
+
+    if (resultAction == &scrollToCurrent) {
+        emit scrollToCurrentToggled();
     }
 }
 
