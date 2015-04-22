@@ -4,7 +4,7 @@
 TARGET = okPlayer
 
 TEMPLATE = app
-VERSION = 0.3.2.0
+VERSION = 0.3.3.0
 QMAKE_TARGET_COMPANY = Okspen Digital Solutions
 QMAKE_TARGET_DESCRIPTION = "A simple but powerful audio player"
 win32:RC_ICONS += images/icons/okplayer.ico
