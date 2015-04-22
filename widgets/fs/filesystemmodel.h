@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QFileIconProvider>
 #include <QTime>
+#include <QMimeData>
 #include "player/player.h"
 
 class FileSystemModel : public QAbstractListModel
@@ -25,6 +26,10 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+
     void setFavoritesManager(FavoritesManager *favorites);
 
     QDir        dir() const;

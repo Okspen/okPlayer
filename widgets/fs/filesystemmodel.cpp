@@ -195,3 +195,28 @@ QString FileSystemModel::previousDirName() const
 {
     return m_prevDirName;
 }
+
+Qt::ItemFlags FileSystemModel::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
+
+    if (index.isValid())
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    else
+        return Qt::ItemIsDropEnabled | defaultFlags;
+}
+
+QMimeData *FileSystemModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+
+    QList<QUrl> urls;
+    foreach (QModelIndex index, indexes) {
+        if (index.isValid()) {
+            urls.append(QUrl::fromLocalFile(data(index, FilePathRole).toString()));
+        }
+    }
+
+    mimeData->setUrls(urls);
+    return mimeData;
+}
