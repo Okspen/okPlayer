@@ -95,7 +95,7 @@ void DownloadPlaylistDialog::setPlaylistText()
 
 void DownloadPlaylistDialog::chooseFolder()
 {
-    QFileDialog fileDialog(this, "Select directory");
+    QFileDialog fileDialog(this, "Select Directory");
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog.setFileMode(QFileDialog::DirectoryOnly);
     fileDialog.setDirectory(ui->destinationEdit->text());
@@ -138,6 +138,6 @@ void DownloadPlaylistDialog::stopDownload()
 
 void DownloadPlaylistDialog::finishDownload()
 {
-    QMessageBox::information(this, "Copying finished", "Playlist has been succesfully copied!");
+    QMessageBox::information(this, "Copying Finished", "Playlist has been succesfully copied!");
     close();
 }
