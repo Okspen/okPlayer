@@ -2,6 +2,7 @@
 #define PLAYORDER_H
 
 #include <QObject>
+#include "playid.h"
 #include "playlist.h"
 
 class PlayOrder : public QObject
@@ -10,6 +11,8 @@ class PlayOrder : public QObject
 public:
     explicit PlayOrder(QObject *parent = 0);
     ~PlayOrder();
+
+    PlayId currentId();
 
     int currentIndex() const;
     void setCurrentIndex(int index);

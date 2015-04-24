@@ -11,6 +11,11 @@ PlayOrder::~PlayOrder()
 {
 }
 
+PlayId PlayOrder::currentId()
+{
+    return PlayId(m_playlist, m_index);
+}
+
 int PlayOrder::currentIndex() const
 {
     if (m_index < 0 || m_index >= m_order.count())
@@ -46,6 +51,9 @@ Playlist *PlayOrder::playlist() const
 
 void PlayOrder::setPlaylist(Playlist *playlist)
 {
+    if (m_playlist == playlist)
+        return;
+
     if (m_playlist) {
         if (m_index != -1)
             m_lastTracks.insert(m_playlist, currentIndex());
