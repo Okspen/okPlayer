@@ -141,7 +141,9 @@ void FileSystemModel::cdUp()
     while (m_dir.cdUp()
            && m_dir.entryList().count() == 1
            && m_dir.entryInfoList().at(0).isDir())
-    {}
+    {
+        prev = m_dir.dirName();
+    }
 
     m_prevDirName   = prev;
     m_fileInfoList  = m_dir.entryInfoList();
