@@ -18,6 +18,9 @@ public:
     explicit PlaylistWidget(QWidget *parent = 0);
     ~PlaylistWidget();
 
+signals:
+    void openFolderRequested(QUrl);
+
 public slots:
     void setPlaylist(Playlist *playlist);
     void setFilter(const QString &pattern);

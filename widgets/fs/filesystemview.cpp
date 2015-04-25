@@ -124,7 +124,7 @@ void FileSystemView::initContextMenus()
 
     addToFavorites      = new QAction("Add to Favorites", this);
 
-    openFolderAction    = new QAction("Open Containing Folder", this);
+    openFolderAction    = new QAction("Open in Explorer", this);
 
     fileMenu = new QMenu(this);
     fileMenu->addAction(replaceAction);

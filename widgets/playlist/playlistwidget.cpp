@@ -30,6 +30,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     m_sortModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     ui->listView->setModel(m_sortModel);
+    connect(ui->listView, SIGNAL(openFolderRequested(QUrl)), this, SIGNAL(openFolderRequested(QUrl)));
 
     connect(ui->clearButton,    SIGNAL(clicked()),              ui->filterEdit, SLOT(clear()));
     connect(ui->filterEdit,     SIGNAL(textChanged(QString)),   this,           SLOT(setFilter(QString)));
@@ -63,7 +64,8 @@ void PlaylistWidget::setPlaylist(Playlist *playlist)
     PlayId current = Player::instance()->cycler()->current();
     if (current.playlist() == playlist)
         ui->listView->scrollTo(
-            sortIndex(current.index()), QAbstractItemView::PositionAtCenter);
+            sortIndex(current.index()),
+            QAbstractItemView::PositionAtCenter);
     else
         ui->listView->scrollToTop();
 
@@ -76,9 +78,9 @@ void PlaylistWidget::setPlaylist(Playlist *playlist)
 void PlaylistWidget::setFilter(const QString &pattern)
 {
     m_sortModel->setFilterFixedString(pattern);
-    ui->listView->scrollTo(sortIndex(
-            Player::instance()->cycler()->current().index()),
-            QAbstractItemView::PositionAtCenter);
+    ui->listView->scrollTo(
+        sortIndex(Player::instance()->cycler()->currentIndex()),
+        QAbstractItemView::PositionAtCenter);
 
     ui->listView->setEmptyMessage(chooseEmptyMessage());
     ui->listView->viewport()->update();

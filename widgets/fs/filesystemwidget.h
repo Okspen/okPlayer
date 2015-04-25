@@ -19,11 +19,12 @@ class FileSystemWidget : public QWidget
 
 public:
     explicit FileSystemWidget(QWidget *parent = 0);
-    void cd(const QString &path);
     QString currentPath() const;
     ~FileSystemWidget();
 
 public slots:
+    void cd(const QUrl &url);
+    void cd(const QString &path);
     void setFocusOnFilter();
 
 protected:

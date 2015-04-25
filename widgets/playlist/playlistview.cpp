@@ -198,7 +198,7 @@ void PlaylistView::contextMenuEvent(QContextMenuEvent *event)
         if (resultAction == &openFolder) {
             QUrl url = index.data(PlaylistModel::UrlRole).toUrl();
             QFileInfo fileInfo(url.toLocalFile());
-            QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.absoluteDir().absolutePath()));
+            emit openFolderRequested(QUrl::fromLocalFile(fileInfo.absoluteDir().absolutePath()));
             return;
         }
     }

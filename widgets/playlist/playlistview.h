@@ -31,6 +31,7 @@ public slots:
 signals:
     void showFavoritesToggled(bool);
     void scrollToCurrentToggled();
+    void openFolderRequested(QUrl);
     
 protected:
     void paintEvent(QPaintEvent *event);

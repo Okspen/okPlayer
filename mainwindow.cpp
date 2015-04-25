@@ -112,6 +112,8 @@ void MainWindow::setConnections()
 
     connect(ui->buttonCopyPlaylist, SIGNAL(clicked()),          this,               SLOT(copyPlaylist()));
 
+    connect(ui->playlistWidget, SIGNAL(openFolderRequested(QUrl)), ui->fileWidget,  SLOT(cd(QUrl)));
+
     connect(ui->actionAlways_on_top,SIGNAL(toggled(bool)),      this,               SLOT(toggleOnTop(bool)));
     connect(ui->actionAbout,        SIGNAL(triggered()),        this,               SLOT(showAboutDialog()));
 
@@ -231,7 +233,6 @@ void MainWindow::writePlayerSettings()
         settings.setValue("audio/volume",  audio->volume());
         settings.setValue("audio/mute",    audio->isMuted());
         settings.setValue("audio/loop",    audio->isLooped());
-        //qDebug () << "audio/mute" << audio->isMuted();
     }
 
     /* Cycler settings */

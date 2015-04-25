@@ -57,6 +57,11 @@ FileSystemWidget::~FileSystemWidget()
     delete ui;
 }
 
+void FileSystemWidget::cd(const QUrl &url)
+{
+    cd(url.toLocalFile());
+}
+
 void FileSystemWidget::setFocusOnFilter()
 {
     ui->filterEdit->setFocus();
