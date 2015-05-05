@@ -33,8 +33,7 @@ public slots:
     void shuffleTracks();
 
 private:
-    Playlist    *m_playlist;
-    PlayOrder   m_order;
+    PlayOrder m_order;
 
     /* Saves the track number, playlist and notifies if checked */
     void setTrack(int i, bool notify = true);

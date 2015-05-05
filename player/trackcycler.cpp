@@ -2,14 +2,13 @@
 #include "player/player.h"
 
 TrackCycler::TrackCycler(QObject *parent) :
-    QObject(parent),
-    m_playlist(0)
+    QObject(parent)
 {
 }
 
 Playlist *TrackCycler::playlist() const
 {
-    return m_playlist;
+    return m_order.playlist();
 }
 
 PlayId TrackCycler::current() const
@@ -57,7 +56,7 @@ void TrackCycler::setShuffle(bool shuffle)
 
 void TrackCycler::setPlaylist(Playlist *playlist)
 {
-    if (playlist == m_playlist)
+    if (playlist == m_order.playlist())
         return;
 
     m_order.setPlaylist(playlist);
